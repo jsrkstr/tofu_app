@@ -1,0 +1,15 @@
+<li id="<%= tofu.id %>">
+  <%= link_to gravatar_for(tofu.user), tofu.user %>
+    <span class="user">
+      <%= link_to tofu.user.name, tofu.user %>
+    </span>
+    <span class="content"><%= tofu.content %></span>
+    <span class="timestamp">
+      <%= time_ago_in_words(tofu.created_at) %> ago.
+    </span>
+  <% if current_user?(tofu.user) %>
+    <%= link_to "delete", tofu, method:  :delete,
+                                     confirm: "You sure?",
+                                     title:   tofu.content %>
+  <% end %>
+</li>

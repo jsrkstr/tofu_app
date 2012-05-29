@@ -3,6 +3,8 @@ class StaticPagesController < ApplicationController
   	if signed_in?
       @micropost  = current_user.microposts.build
       @feed_items = current_user.feed.paginate(page: params[:page])
+      @tofus = current_user.tofus.paginate(page: params[:page])
+      @received_tofus = current_user.received_tofus.paginate(page: params[:page])
     end
   end
 

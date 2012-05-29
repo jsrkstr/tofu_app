@@ -1,0 +1,6 @@
+<% if @received_tofus.any? %>
+  <ol class="microposts">
+    <%= render partial: 'shared/tofu', collection: @received_tofus %>
+  </ol>
+  <%= will_paginate @tofus %>
+<% end %>

@@ -7,15 +7,23 @@
       <section>
         <%= render 'shared/stats' %>
       </section>
+    </aside>
+    <aside class="span8">
       <section>
         <%= render 'shared/micropost_form' %>
       </section>
     </aside>
-    <div class="span8">
-      <h3>Micropost Feed</h3>
-      <%= render 'shared/feed' %>
-    </div>
   </div>  
+  <div class="row">
+    <div class="span6">
+        <h3>Tofus Received</h3>
+        <%= render 'shared/received_tofus' %>
+    </div>
+    <div class="span6">
+        <h3>Tofus Sent</h3>
+        <%= render 'shared/tofus' %>
+    </div>
+  </div>
 <% else %>
   <div class="center hero-unit">
     <h1>Welcome to the Sample App</h1>
