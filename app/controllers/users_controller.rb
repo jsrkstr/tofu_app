@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   end
 
   def new
-  	@user = User.new
+    @user = User.new
   end
 
   def create
@@ -25,8 +25,9 @@ class UsersController < ApplicationController
   end
 
   def show
-  	@user = User.find(params[:id])
+    @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
+    @tofus = @user.tofus.paginate(page: params[:page])
   end
 
   def edit

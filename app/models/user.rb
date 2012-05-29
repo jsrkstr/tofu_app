@@ -13,7 +13,10 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation
 
   has_many :microposts, dependent: :destroy
+  has_many :tofus, dependent: :destroy
 
+  # has_many :reciepts, foreign_key: "sender_id", dependent: :destroy
+  
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :relationships, source: "followed"
 

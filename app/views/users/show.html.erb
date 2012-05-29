@@ -21,4 +21,13 @@
       <%= will_paginate @microposts %>
     <% end %>
   </div>
+  <div class="span8">
+    <% if @user.tofus.any? %>
+      <h3>My Tofus (<%= @user.tofus.count %>)</h3>
+      <ol class="tofus">
+        <%= render @tofus %>
+      </ol>
+      <%= will_paginate @tofus %>
+    <% end %>
+  </div>
 </div>
