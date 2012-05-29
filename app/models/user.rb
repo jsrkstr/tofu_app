@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
 
   has_many :microposts, dependent: :destroy
   has_many :tofus, dependent: :destroy
+  has_many :reciepts, foreign_key: "recipient_id"
+  has_many :received_tofus, through: :reciepts, source: "tofu" 
 
   # has_many :reciepts, foreign_key: "sender_id", dependent: :destroy
   
