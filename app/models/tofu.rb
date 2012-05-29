@@ -1,5 +1,5 @@
 class Tofu < ActiveRecord::Base
-  attr_accessible :content, :group, :priority, :status, :recipient_ids
+  attr_accessible :content, :group, :priority, :status
   belongs_to :user
 
   has_many :reciepts, dependent: :destroy
@@ -9,15 +9,15 @@ class Tofu < ActiveRecord::Base
   validates :group, presence: true
   # validates :recipients, presence: true
 
-  # before_save :create_reciepts
+  before_save :create_reciepts
 
   default_scope order: 'tofus.created_at DESC'
 
-  # private
+  private
 
-  # 	def create_reciepts
-  # 		:recipients_ids.split(",")each do |id|
-  # 			Reciepts.create!(recipient_id: id)
-  # 		end
-  # 	end
+  	def create_reciepts
+  		:recipients_ids.split(",").each do |id|
+  			Reciepts.create!(recipient_id: id)
+  		end
+  	end
 end
