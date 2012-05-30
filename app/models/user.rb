@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
 
   has_many :inverse_unapproved_friendships, :class_name => "Friendship", :foreign_key => "friend_id", :conditions => { :approved => false }
 
-  has_many :indirect_friends, :through => :inverse_approved_friendships, :source => :friend
+  has_many :indirect_friends, :through => :inverse_approved_friendships, :source => :user
 
 
 
@@ -85,6 +85,11 @@ class User < ActiveRecord::Base
     unless @friendship
       @requested = requested_friendships
       @friendship = @requested.find_by_friend_id(other_user_id)
+    end
+
+    # see if they are friends
+    unless @friendship
+      @friendship = friend?(other_user_id)
     end
 
 
