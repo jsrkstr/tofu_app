@@ -39,7 +39,7 @@ App = {
 
 	parseContent : function(){
 
-		var data_source = JSON.parse($("#micropost_content").attr("data-source"));
+		var data_source = JSON.parse($("#tofu_content").attr("data-source"));
 		var allValues = [];
       	var allKeywords = data_source.map(function(i){
       		var s = i.split(",");
@@ -49,7 +49,7 @@ App = {
 
       	var starting_with_at = /^@/;
 
-      	var content = $("#micropost_content").val();
+      	var content = $("#tofu_content").val();
       	var splits = content.split(" ");
 
       	for (var i = splits.length - 1; i >= 0; i--) {

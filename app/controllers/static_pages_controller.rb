@@ -5,6 +5,7 @@ class StaticPagesController < ApplicationController
       @feed_items = current_user.feed.paginate(page: params[:page])
       @tofus = current_user.tofus.paginate(page: params[:page])
       @received_tofus = current_user.received_tofus.paginate(page: params[:page])
+      @friends = current_user.friends
     end
   end
 
