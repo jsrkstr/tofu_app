@@ -12,6 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require underscore-min
+//= require backbone-min
 //= require bootstrap
 //= require_tree .
+//= reqire custom
 

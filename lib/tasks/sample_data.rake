@@ -8,31 +8,47 @@ namespace :db do
 end
 
 def make_users
-  admin = User.create!(name:     "Example User",
-                       email:    "example@railstutorial.org",
-                       password: "foobar",
-                       password_confirmation: "foobar")
+
   sachin = User.create!(name: "Sachin",
                  email: "sachin.saluja132@gmail.com",
                  password: "asdfgh",
                  password_confirmation: "asdfgh")
-  User.create!(name: "Maku",
+
+  maku = User.create!(name: "Maku",
                  email: "maku@makuchaku.in",
                  password: "asdfgh",
                  password_confirmation: "asdfgh")
   
   sachin.toggle!(:admin)
+
+  admin = User.create!(name:     "Example User",
+                       email:    "example@railstutorial.org",
+                       password: "foobar",
+                       password_confirmation: "foobar")
   
-  99.times do |n|
+  20.times do |n|
     name  = Faker::Name.name
     email = "example-#{n+1}@railstutorial.org"
     password  = "password"
-    User.create!(name:     name,
+    user = User.create!(name:     name,
                  email:    email,
                  password: password,
                  password_confirmation: password)
+    user.connect(1)
   end
+
+
+  10.times do |n|
+    sachin.connect(n)
+    maku.connect(n)
+  end
+
+  10.times do |n|
+
+  end
+
 end
+
 
 def make_microposts
   users = User.all(limit: 6)

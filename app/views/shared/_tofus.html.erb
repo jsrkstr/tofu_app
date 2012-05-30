@@ -1,6 +1,7 @@
 <% if @tofus.any? %>
   <ol class="microposts">
-    <%= render partial: 'shared/tofu', collection: @tofus %>
+    <%#= render partial: 'shared/tofu', collection: @tofus %>
+    <div class="bootstrapped-models" id="bootstrapped-tofus" data='<%= @tofus.to_json %>'></div>
   </ol>
-  <%= will_paginate @tofus %>
+  <%#= will_paginate @tofus %>
 <% end %>

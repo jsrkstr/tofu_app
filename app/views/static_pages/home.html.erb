@@ -15,15 +15,29 @@
     </aside>
   </div>  
   <div class="row">
-    <div class="span6">
+    <div class="span6" id="received-tofus">
         <h3>Tofus Received</h3>
-        <%= render 'shared/received_tofus' %>
+        <div class="bootstrapped-models" id="bootstrapped-tofus" data='<%= @tofus.to_json %>'></div>
+        <%#= render 'shared/received_tofus' %>
     </div>
-    <div class="span6">
+    <div class="span6" id="sent-tofus">
         <h3>Tofus Sent</h3>
-        <%= render 'shared/tofus' %>
+        <div class="bootstrapped-models" id="bootstrapped-received-tofus" data='<%= @received_tofus.to_json %>'></div>
+        <%#= render 'shared/tofus' %>
     </div>
   </div>
+
+  <script type="text/template" id="tofu-template">
+    <a href={{ "/users/" + user_id }}>
+      <img src={{ user_gravatar }} class="gravatar">
+    </a>
+    <span class="user">
+      <a href={{ "/users/" + user_id }} class="name">{{ user_name}}</a>
+    </span>
+    <span class="content">{{ content }}</span>
+    <span class="timestamp">{{ timestamp }}</span>
+  </script>
+
 <% else %>
   <div class="center hero-unit">
     <h1>Welcome to the Sample App</h1>

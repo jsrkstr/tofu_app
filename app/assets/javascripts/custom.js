@@ -1,5 +1,11 @@
 App = {
 
+	models : {},
+
+	collections : {},
+
+	views :{},
+
 	// a hash for creating new tofu
 	newTOFU : {
 		group : "",
@@ -10,10 +16,24 @@ App = {
 
 	init : function(){
 		console.log("app init");
-		console.log($("#new-tofu-button"));
+
 		$("#new-tofu-button").bind("click", $.proxy(App.createTofu, App) );
-		$("#connect-button").bind("click", $.proxy(App.connectUser, App) );
+
+		$("#tofu_content").keyup($.proxy(function(e){
+			if(e.which == 13)
+				this.createTofu();
+		}, App) );
+
 		$("#disconnect-button").bind("click", $.proxy(App.disconnectUser, App) );
+
+		_.templateSettings = {
+		  interpolate : /\{\{(.+?)\}\}/g
+		};
+
+		App.sentTofus = new App.collections.Tofus;
+		App.sentTofusView = new App.views.Tofus({collection : App.sentTofus});
+		$("#sent-tofus").append(App.sentTofusView.render().el);
+		App.sentTofus.reset(JSON.parse($("#bootstrapped-tofus").attr("data")));
 	},
 
 
@@ -28,9 +48,11 @@ App = {
 			},
 			success : function(){
 				console.log("created");
+				$("#tofu_content").val("");
 			},
 			error : function(){
 				console.log("error");
+				$("#tofu_content").val("");
 			}
 		})
 
@@ -118,6 +140,116 @@ App = {
 
 
 };
+
+
+App.models.Tofu = Backbone.Model.extend({
+
+	defaults : {
+		group : "msg",
+		priority : "moderate"
+	},
+
+
+	validate : function(attrs){
+		 if(attrs.content == "")
+		 	return false;
+	},
+
+
+	initialize : function(args){
+		this.set({timestamp : $.timeago(this.get("created_at"))});
+	}
+
+});
+
+
+App.collections.Tofus = Backbone.Collection.extend({
+
+
+	url : "/tofus",
+
+	
+	model : App.models.Tofu,
+
+
+	initialize : function(args){
+
+	},
+
+
+	comparator : function(model){
+		return -(new Date(model.get("updated_at"))).getTime();
+	}
+
+
+});
+
+
+App.views.Tofus = Backbone.View.extend({
+
+	tagName : "ol",
+
+	className : "microposts",
+
+	events : {
+		
+	},
+
+
+	initialize : function(args){
+		this.collection.bind("reset", this.addAll, this);
+	},
+
+
+	render : function(){
+		// do something...
+		this.addAll();
+		return this;
+	},
+
+
+	addAll : function(){
+		this.collection.each(function(model){
+			this.addOne(model);
+		}, this);
+	},
+
+
+	addOne : function(model){
+		var view = new App.views.Tofu({model : model});
+		$(this.el).append(view.render().el);
+	}
+
+});
+
+
+
+
+App.views.Tofu = Backbone.View.extend({
+
+	template : null,
+
+	tagName : "li",
+
+
+	events : {
+		// bind events..
+	},
+
+
+	initialize : function(args){
+		this.template =  _.template($("#tofu-template").html());
+	},
+
+
+	render : function(){
+		$(this.el).html(this.template(this.model.toJSON())).attr("id", this.model.id);
+		return this;
+	}
+
+});
+
+	
 
 
 // It start here...

@@ -1,6 +1,8 @@
 <% if @received_tofus.any? %>
   <ol class="microposts">
-    <%= render partial: 'shared/tofu', collection: @received_tofus %>
+    <%#= render partial: 'shared/tofu', collection: @received_tofus %>
+    <div class="bootstrapped-models" id="bootstrapped-received-tofus" data='<%= @received_tofus.to_json %>'></div>
   </ol>
-  <%= will_paginate @tofus %>
+  <%#= will_paginate @tofus %>
+
 <% end %>
