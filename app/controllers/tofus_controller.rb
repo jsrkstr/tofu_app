@@ -4,7 +4,7 @@ class TofusController < ApplicationController
   respond_to :json
 
   def create
-
+    # TODO send error on failure to save and send JSON instead of js
   	@tofu = current_user.tofus.build(params[:tofu])
 
   	if @tofu.save
@@ -13,20 +13,14 @@ class TofusController < ApplicationController
   		respond_with @tofu
   	end
 
-  	# TODO send error on failure to save and send JSON instead of js
-
   end
 
   def destroy
 
-  	# TODO fix destroy and
+    @tofu = current_user.tofus.find(params[:id]);
+    @tofu.destroy
 
-  	# @tofu.destroy
-
-  	respond_with @tofu
-    # respond_to do |format|
-    #   # format.html { redirect_to current_user }
-    #   format.js
-    # end
+    # TODO send a proper response
+  	respond_with (true)
   end
 end
