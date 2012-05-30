@@ -3,6 +3,8 @@ class TofusController < ApplicationController
 
   respond_to :json
 
+  require 'pubnub'
+
   def create
     # TODO send error on failure to save and send JSON instead of js
   	@tofu = current_user.tofus.build(params[:tofu])

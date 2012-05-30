@@ -34,27 +34,26 @@ App = {
 		App.sentTofusView = new App.views.Tofus({collection : App.sentTofus});
 		$("#sent-tofus").append(App.sentTofusView.render().el);
 		App.sentTofus.reset(JSON.parse($("#bootstrapped-tofus").attr("data")));
+
+		App.receivedTofus = new App.collections.Tofus;
+		App.receivedTofusView = new App.views.Tofus({collection : App.receivedTofus});
+		$("#received-tofus").append(App.receivedTofusView.render().el);
+		App.receivedTofus.reset(JSON.parse($("#bootstrapped-received-tofus").attr("data")));
 	},
 
 
 	createTofu : function(){
 		this.parseContent();
 
-		$.ajax({
-			url : "/tofus",
-			type : "POST",
-			data : {
-				tofu : this.newTOFU
-			},
+		this.sentTofus.create(this.newTOFU, {
+			wait : true,
 			success : function(){
-				console.log("created");
 				$("#tofu_content").val("");
 			},
 			error : function(){
-				console.log("error");
 				$("#tofu_content").val("");
 			}
-		})
+		});
 
 	},
 
@@ -84,7 +83,7 @@ App = {
       	}
 
       	this.addTofuAttr("content", content);
-
+      	this.newTOFU.created_at = new Date();
 	},
 
 
@@ -178,7 +177,7 @@ App.collections.Tofus = Backbone.Collection.extend({
 
 
 	comparator : function(model){
-		return -(new Date(model.get("updated_at"))).getTime();
+		return (new Date(model.get("updated_at"))).getTime();
 	}
 
 
@@ -198,6 +197,7 @@ App.views.Tofus = Backbone.View.extend({
 
 	initialize : function(args){
 		this.collection.bind("reset", this.addAll, this);
+		this.collection.bind("add", this.addOne, this);
 	},
 
 
@@ -217,7 +217,7 @@ App.views.Tofus = Backbone.View.extend({
 
 	addOne : function(model){
 		var view = new App.views.Tofu({model : model});
-		$(this.el).append(view.render().el);
+		$(this.el).prepend(view.render().el);
 	}
 
 });
