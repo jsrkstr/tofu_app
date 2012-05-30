@@ -6,8 +6,7 @@ App = {
 		recipient_ids : ""
 		// priority : optional
 	},
-
-	usedKeywords : [],
+	
 
 	init : function(){
 		console.log("app init");
@@ -37,16 +36,53 @@ App = {
 
 
 	parseContent : function(){
-		var content = $("#micropost_content").val();
-		// remove keyword from content
-		for (var i = this.usedKeywords.length - 1; i >= 0; i--) {	
-			content = content.replace(this.usedKeywords[i] + " ", "");
-		};
-      	
-      	this.newTOFU.content = content;
+
+		var data_source = JSON.parse($("#micropost_content").attr("data-source"));
+		var allValues = [];
+      	var allKeywords = data_source.map(function(i){
+      		var s = i.split(",");
+      		allValues.push(s[1]);
+      		return s[0];
+      	});
+
+      	var starting_with_at = /^@/;
+
+      	var content = $("#micropost_content").val();
+      	var splits = content.split(" ");
+
+      	for (var i = splits.length - 1; i >= 0; i--) {
+      		var keyword = splits[i].substr(1); // eg task, sachin (without @)
+      		var index = allKeywords.indexOf(keyword); // index Of Matched Keyword In AllKeywords
+      		if(starting_with_at.test(splits[i]) && index != -1){ // eg split[0] = @tast, @sachin
+      			content = content.replace(splits[i] + " ", "");
+      			this.addTofuAttr(allValues[index], keyword);
+      		}
+      	}
+
+      	this.addTofuAttr("content", content);
+
+	},
+
+
+	addTofuAttr : function(item_type, item_value){
+		switch(item_type){
+			case "group" : attr = this.newTOFU.group = item_value;
+			  break;
+
+			case "priority" : this.newTOFU.priority = item_value;
+			  break;
+
+			case "content" : this.newTOFU.content = item_value;
+				break;
+
+			default : this.newTOFU["recipient_ids"] += this.newTOFU["recipient_ids"] == ""? item_type : "," + item_type;
+			  break;
+		}
 	}
 
 
 };
 
+
+// It start here...
 $(document).ready(App.init)

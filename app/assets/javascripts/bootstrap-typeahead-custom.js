@@ -40,33 +40,12 @@
 
   , select: function () {
       var item_value = this.$menu.find('.active').attr('data-value');
-      var item_type = this.$menu.find('.active').attr('data-type')
-
+      
       var keyword = "@" + item_value;
       var val = this.$element.val();
       var index = val.lastIndexOf("@");
       var new_val = val.substr(0, index) + keyword + " ";
       this.$element.val(new_val)
-
-      var attr;
-
-      // fill to new tofu hash
-
-      switch(item_type){
-        case "group" : attr = "group";
-          App.newTOFU[attr] = item_value;
-          break;
-
-        case "priority" : attr = "priority";
-          App.newTOFU[attr] = item_value;
-          break;
-
-        default : attr = "recipient_ids"; // TODO error when user does backspace
-          App.newTOFU[attr] += App.newTOFU[attr] == ""? item_type : "," + item_type;
-          break;
-      }
-
-      App.usedKeywords.push(keyword);
 
       return this.hide()
     }
@@ -157,8 +136,7 @@
       items = $(items).map(function (i, item) {
         var split = item.split(",");
         var item_value = split[0];
-        var item_type = split[1];
-        i = $(that.options.item).attr('data-value', item_value).attr('data-type', item_type)
+        i = $(that.options.item).attr('data-value', item_value)
         i.find('a').html(that.highlighter(item_value))
         return i[0]
       })
