@@ -28,6 +28,34 @@ class User < ActiveRecord::Base
   has_many :followers, through: :reverse_relationships, source: :follower
 
 
+  has_many :approved_friendships, :class_name => "Friendship", :conditions => { :approved => true }, dependent: :destroy
+
+  has_many :unapproved_friendships, :class_name => "Friendship", :conditions => { :approved => false }
+
+  has_many :direct_friends, :through => :approved_friendships, :source => :friend
+
+  has_many :inverse_approved_friendships, :class_name => "Friendship", :foreign_key => "friend_id", :conditions => { :approved => true }, dependent: :destroy
+
+  has_many :inverse_unapproved_friendships, :class_name => "Friendship", :foreign_key => "friend_id", :conditions => { :approved => false }
+
+  has_many :indirect_friends, :through => :inverse_approved_friendships, :source => :friend
+
+
+
+  def friends
+    direct_friends | indirect_friends
+  end
+
+  def pending_friendships
+    inverse_unapproved_friendships
+  end
+
+  def requested_friendships
+    unapproved_friendships
+  end
+
+
+
   has_secure_password
 
   before_save { |user| user.email = email.downcase }
