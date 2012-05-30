@@ -16,9 +16,13 @@ class Tofu < ActiveRecord::Base
   private
 
   	def create_reciepts
-  		self.recipient_ids.to_s.split(",").each do |i|
+      split = self.recipient_ids.to_s.split(",")
+  		split.each do |i|
   			reciepts.create!(recipient_id: i)
   		end
+
+      self.recipient_ids = split[1] # store only first recipient in tofu table/ model
+
   	end
 
 end
