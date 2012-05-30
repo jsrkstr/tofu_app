@@ -1,5 +1,9 @@
 SampleApp::Application.routes.draw do
 
+  get "tofus/create"
+
+  get "tofus/destroy"
+
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
   resources :microposts, only: [:create, :destroy]
