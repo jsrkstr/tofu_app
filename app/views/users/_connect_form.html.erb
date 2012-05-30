@@ -1,0 +1,10 @@
+<% unless current_user?(@user) %>
+  <div id="follow_form">
+  <% @friendship = current_user.friend?(@user.id) %>
+  <% if @friendship %>
+    <%= render 'disconnect' %>
+  <% else %>
+    <%= render 'connect' %>
+  <% end %>
+  </div>
+<% end %>

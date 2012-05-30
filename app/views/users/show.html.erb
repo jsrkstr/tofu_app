@@ -5,6 +5,7 @@
       <h1>
         <%= gravatar_for @user %>
         <%= @user.name %>
+        <%= render 'connect_form' if signed_in? %>
       </h1>
     </section>
     <section>

@@ -46,12 +46,64 @@ class User < ActiveRecord::Base
     direct_friends | indirect_friends
   end
 
+  def friend?(other_user_id)
+    approved_friendships.find_by_friend_id(other_user_id) || inverse_approved_friendships.find_by_user_id(other_user_id)
+  end
+
+  def approve(friendship_id)
+    @friendship = inverse_unapproved_friendships.find(friendship_id);
+    if @friendship
+      @friendship.approved = true
+      @friendship.save
+    end
+    @friendship
+  end
+
   def pending_friendships
     inverse_unapproved_friendships
   end
 
   def requested_friendships
     unapproved_friendships
+  end
+
+  # connect to a user
+  def connect(other_user_id)
+
+    # see of other user has already requested
+    @pending = pending_friendships
+    @friendship = @pending.find_by_user_id(other_user_id)
+
+    # Approve, when there is a request pending
+    if @friendship
+      @friendship.approved = true  
+      @friendship.save
+    end
+
+
+    # see you user has already requested a friendship
+    unless @friendship
+      @requested = requested_friendships
+      @friendship = @requested.find_by_friend_id(other_user_id)
+    end
+
+
+    # finally create new 
+    unless @friendship
+      @friendship = unapproved_friendships.create!(friend_id: other_user_id, approved: false)
+    end
+
+    @friendship
+
+  end
+  # connect to a user
+
+
+  def disconnect(friendship_id)
+    @friendship = Friendship.find(friendship_id);
+    if (@friendship.user_id == self.id) | (@friendship.friend_id == self.id)
+      @friendship.destroy
+    end
   end
 
 

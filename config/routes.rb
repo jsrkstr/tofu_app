@@ -9,6 +9,7 @@ SampleApp::Application.routes.draw do
   resources :microposts, only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
   resources :tofus, only: [:create, :destroy]
+  resources :friendships, only: [:create, :update, :destroy]
 
   resources :users do
     member do

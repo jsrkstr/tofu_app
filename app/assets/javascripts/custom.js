@@ -12,6 +12,8 @@ App = {
 		console.log("app init");
 		console.log($("#new-tofu-button"));
 		$("#new-tofu-button").bind("click", $.proxy(App.createTofu, App) );
+		$("#connect-button").bind("click", $.proxy(App.connectUser, App) );
+		$("#disconnect-button").bind("click", $.proxy(App.disconnectUser, App) );
 	},
 
 
@@ -78,6 +80,40 @@ App = {
 			default : this.newTOFU["recipient_ids"] += this.newTOFU["recipient_ids"] == ""? item_type : "," + item_type;
 			  break;
 		}
+	},
+
+
+	connectUser : function(){
+		var user_id = $("#connect-button").attr("data-user-id");
+
+		$.ajax({
+			url : "/friendships",
+			type : "POST",
+			data : { friendship : {
+				user_id : user_id
+			}},
+			success : function(){
+				console.log("connected");
+			},
+			error : function(){
+				console.log("error in connecting");
+			}
+		});
+	},
+
+
+	disconnectUser : function(){
+		var friendship_id = $("#disconnect-button").attr("data-friendship-id");
+		$.ajax({
+			url : "/friendships/" + friendship_id,
+			type : "DELETE",
+			success : function(){
+				console.log("disconnected");
+			},
+			error : function(){
+				console.log("error in disconnecting");
+			}
+		});
 	}
 
 
