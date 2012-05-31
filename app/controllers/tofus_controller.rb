@@ -7,8 +7,17 @@ class TofusController < ApplicationController
     # TODO send error on failure to save and send JSON instead of js
   	@tofu = current_user.tofus.build(params[:tofu])
 
+
   	if @tofu.save
-  		respond_with @tofu
+
+      # send to all recipients
+      json_tofu = @tofu.to_json
+
+      @tofu.all_recipient_ids.each do |recipient_id|
+        Pusher[recipient_id].trigger!('add:tofu', json_tofu)
+      end
+
+      respond_with @tofu
   	else
   		respond_with @tofu
   	end

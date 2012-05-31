@@ -12,7 +12,6 @@ class Tofu < ActiveRecord::Base
   after_save :create_reciepts
 
   after_initialize do |tofu|
-    puts "initialized"
     tofu["user_name"] = tofu.user.name
     gravatar_id = Digest::MD5::hexdigest(tofu.user.email.downcase)
     gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}"
@@ -31,7 +30,8 @@ class Tofu < ActiveRecord::Base
   			reciepts.create!(recipient_id: i)
   		end
 
-      self.recipient_ids = split[1] # store only first recipient in tofu table/ model
+      self["all_recipient_ids"] = split # save all (array)
+      self.recipient_ids = split[0] # store only first recipient in tofu table/ model
 
   	end
 

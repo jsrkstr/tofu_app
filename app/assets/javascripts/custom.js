@@ -39,6 +39,12 @@ App = {
 		App.receivedTofusView = new App.views.Tofus({collection : App.receivedTofus});
 		$("#received-tofus").append(App.receivedTofusView.render().el);
 		App.receivedTofus.reset(JSON.parse($("#bootstrapped-received-tofus").attr("data")));
+
+		var pusher = new Pusher('4c4ffd2eb14d4cf7188b');
+	    var channel = pusher.subscribe($("meta[name=user_id]").attr("content"));	
+	    channel.bind('add:tofu', function(data) {
+	      App.receivedTofus.add(data);
+	    });
 	},
 
 
@@ -54,6 +60,12 @@ App = {
 				$("#tofu_content").val("");
 			}
 		});
+
+		// clear 
+		this.newTOFU = {
+			group : "",
+			recipient_ids : ""
+		};
 
 	},
 

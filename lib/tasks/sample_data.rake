@@ -28,24 +28,22 @@ def make_users
   
   20.times do |n|
     name  = Faker::Name.name
-    email = "example-#{n+1}@railstutorial.org"
+    name = name.split(" ").join()
+    email = "example-#{n+1}@gmail.org"
     password  = "password"
     user = User.create!(name:     name,
                  email:    email,
                  password: password,
                  password_confirmation: password)
     user.connect(1)
+    user.connect(2)
   end
 
 
-  10.times do |n|
+  (3..13).each { |n|
     sachin.connect(n)
     maku.connect(n)
-  end
-
-  10.times do |n|
-
-  end
+  }
 
 end
 
