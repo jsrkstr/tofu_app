@@ -36,8 +36,14 @@
     </span>
     <span class="content">{{ content }}</span>
     <span class="timestamp">{{ timestamp }}</span>
+    <ol class="comments"></ol>
+    <form class="comment-form" onsubmit="return false"><input type="text" class="span5 hide comment-box" placeholder="Type something…"></form>
   </script>
 
+  <script type="text/template" id="comment-template">
+    <a href={{ "/users/" + author_id }} >{{ "@" + author_id }}</a>
+    <span>{{ content }}</span>
+  </script>
 <% else %>
   <div class="center hero-unit">
     <h1>Welcome to the Sample App</h1>
@@ -48,8 +54,7 @@
       sample application.
     </h2>
 
-    <%= link_to "Sign up now!", signup_path, 
-                                class: "btn btn-large btn-primary" %>
+    <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
   </div>
 
   <%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>

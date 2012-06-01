@@ -218,13 +218,18 @@ input, textarea, select, .uneditable-input {
 
 /* microposts */
 
-.microposts {
+.tofus {
   list-style: none;
   margin: 10px 0 0 0;
 
   li {
     padding: 10px 0;
     border-top: 1px solid #e8e8e8;
+    cursor: pointer;
+    input {
+      margin-left: 60px;
+      margin-top: 10px;
+    }
   }
 }
 .content {

@@ -1,5 +1,5 @@
 <% if @tofus.any? %>
-  <ol class="microposts">
+  <ol class="tofus">
     <%#= render partial: 'shared/tofu', collection: @tofus %>
     <div class="bootstrapped-models" id="bootstrapped-tofus" data='<%= @tofus.to_json %>'></div>
   </ol>

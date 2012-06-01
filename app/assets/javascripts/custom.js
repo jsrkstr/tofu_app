@@ -35,6 +35,9 @@ App = {
 		  interpolate : /\{\{(.+?)\}\}/g
 		};
 
+
+		App.currentComments = new App.collections.Comments();
+
 		App.sentTofus = new App.collections.Tofus;
 		App.sentTofusView = new App.views.Tofus({collection : App.sentTofus});
 		$("#sent-tofus").append(App.sentTofusView.render().el);
@@ -45,22 +48,24 @@ App = {
 		$("#received-tofus").append(App.receivedTofusView.render().el);
 		App.receivedTofus.reset(JSON.parse($("#bootstrapped-received-tofus").attr("data")));
 
-		var socketUrl = App.env == "development"? 'http://lh:3001' : 'http://tofuapp.cloudno.de';
-		var socket = io.connect(socketUrl);
 
-		socket.on('connect', function () {
-			socket.emit("register", App.currentUserId, function(d){
+		var socketUrl = App.env == "development"? 'http://lh:3001' : 'http://tofuapp.cloudno.de';
+		App.socket = io.connect(socketUrl);
+
+		App.socket.on('connect', function () {
+			App.socket.emit("register", App.currentUserId, function(d){
 				console.log("connected to socket", d);
 			});
 		});
 
-		socket.on("message", function(data){
+		App.socket.on("message", function(data){
 			if(data.group) // its a tofu
 				App.receivedTofus.add(data);
 
-			// if(data.type)
-				//its a comment
+			if(data.type)
+				App.currentComments.add(data);
 		});
+
 	},
 
 
@@ -185,6 +190,41 @@ App.models.Tofu = Backbone.Model.extend({
 
 	initialize : function(args){
 		this.set({timestamp : $.timeago(this.get("created_at"))});
+		
+		var comments_channel = "add:" + this.id;// listen to channel add:tofu_id
+		App.currentComments.on(comments_channel, this.addComment, this);
+	},
+
+
+	addComment : function(model){
+		this.trigger("add:comment", model);
+	},
+
+
+	createComment : function(content){
+
+		var recipient_ids = this.get("recipient_ids").split(",");
+		var index = recipient_ids.indexOf(App.currentUserId);
+
+		// remove authors id
+		if(index != -1)
+			recipient_ids.splice(index, 1);
+
+		// add tofu's user id
+		var uid = this.get("user_id");
+		if(uid != App.currentUserId)
+			recipient_ids.push(uid);
+
+		App.currentComments.create({
+			type : "comment",
+			tofu_id : this.id,
+			content : content,
+			created_at : new Date(),
+			author_id : App.currentUserId,
+			recipient_ids : recipient_ids
+		}, {
+			wait : true
+		});
 	}
 
 });
@@ -216,7 +256,7 @@ App.views.Tofus = Backbone.View.extend({
 
 	tagName : "ol",
 
-	className : "microposts",
+	className : "tofus",
 
 	events : {
 		
@@ -261,21 +301,61 @@ App.views.Tofu = Backbone.View.extend({
 
 
 	events : {
-		// bind events..
+		"click" : "toggleInput",
+		"submit .comment-form" : "createComment"
 	},
 
 
 	initialize : function(args){
 		this.template =  _.template($("#tofu-template").html());
+		this.model.on("add:comment", this.addComment, this);
+		this.commentTemplate = _.template($("#comment-template").html());
 	},
 
 
 	render : function(){
 		$(this.el).html(this.template(this.model.toJSON())).attr("id", this.model.id);
 		return this;
+	},
+
+
+	createComment : function(){
+		this.model.createComment(this.$(".comment-box").val());
+		return false;
+	},
+
+
+	addComment : function(model){
+		this.$(".comments").append(this.commentTemplate(model.toJSON()));
+	},
+
+
+	toggleInput : function(e){
+		if(!$(e.target).hasClass("comment-box"))
+			this.$("input").toggle();
 	}
 
 });
+
+
+
+App.collections.Comments = Backbone.Collection.extend({
+
+	backend : "comments",
+
+	initialize : function(args){
+		this.on("add", this.dispatch, this); //dispatch comment to corrent tofu
+	},
+
+
+	dispatch : function(comment){
+		var channel = "add:"+ comment.get("tofu_id");
+		this.trigger(channel, comment);
+	}
+
+
+});
+
 
 	
 
