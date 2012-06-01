@@ -10,10 +10,4 @@ module ApplicationHelper
     end
   end
 
-
- #  	# load pusher
-	# Pusher.app_id = '15679'
-	# Pusher.key = '4c4ffd2eb14d4cf7188b'
-	# Pusher.secret = '34eac7315411ee5ceb8a'
-
 end

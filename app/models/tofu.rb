@@ -30,8 +30,8 @@ class Tofu < ActiveRecord::Base
   			reciepts.create!(recipient_id: i)
   		end
 
-      self["all_recipient_ids"] = split # save all (array)
-      self.recipient_ids = split[0] # store only first recipient in tofu table/ model
+      # self["all_recipient_ids"] = split # save all (array)
+      # self.recipient_ids = split[0] # store only first recipient in tofu table/ model
 
   	end
 

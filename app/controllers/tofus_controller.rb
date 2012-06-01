@@ -11,15 +11,20 @@ class TofusController < ApplicationController
   	if @tofu.save
 
       # send to all recipients
+
+      @tofu["recipient_ids"] = @tofu.recipient_ids.to_s.split(","); #convert to array after it is saved as string
       json_tofu = @tofu.to_json
 
-      # @tofu.all_recipient_ids.each do |recipient_id|
-      #   Pusher[recipient_id].trigger!('add:tofu', json_tofu)
-      # end
+      # Constants
+      if Rails.env == "development"
+        realtime_server_pub_url = "http://lh:3001/publish"
+      else
+        realtime_server_pub_url = "http://tofuapp.cloudno.de/publish"
+      end
 
       EM.run do
-        @tofu.all_recipient_ids.each do |id|
-          http = EM::HttpRequest.new('http://lh:3001/publish').post :body => {"data" => json_tofu}
+        @tofu.recipient_ids.each do |id|
+          http = EM::HttpRequest.new(realtime_server_pub_url).post :body => {"data" => json_tofu}
           http.callback {
             EM.stop
           }

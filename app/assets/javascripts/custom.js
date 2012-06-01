@@ -17,13 +17,16 @@ App = {
 	init : function(){
 		console.log("app init");
 
+		App.currentUserId = $("meta[name=user_id]").attr("content");
+
 		$("#new-tofu-button").bind("click", $.proxy(App.createTofu, App) );
 
-		$("#tofu_content").keyup($.proxy(function(e){
+		$("#tofu_content").keydown($.proxy(function(e){
 			if(e.which == 13)
 				this.createTofu();
 		}, App) );
 
+		$("#connect-button").bind("click", $.proxy(App.connectUser, App) );
 		$("#disconnect-button").bind("click", $.proxy(App.disconnectUser, App) );
 
 		_.templateSettings = {
@@ -40,11 +43,22 @@ App = {
 		$("#received-tofus").append(App.receivedTofusView.render().el);
 		App.receivedTofus.reset(JSON.parse($("#bootstrapped-received-tofus").attr("data")));
 
-		var pusher = new Pusher('4c4ffd2eb14d4cf7188b');
-	    var channel = pusher.subscribe($("meta[name=user_id]").attr("content"));	
-	    channel.bind('add:tofu', function(data) {
-	      App.receivedTofus.add(data);
-	    });
+
+		var socket = io.connect('http://lh:3001');
+		
+		socket.on('connect', function () {
+			socket.emit("register", App.currentUserId, function(d){
+				console.log("connected to socket", d);
+			});
+		});
+
+		socket.on("message", function(data){
+			if(data.group) // its a tofu
+				App.receivedTofus.add(data);
+
+			// if(data.type)
+				//its a comment
+		});
 	},
 
 
