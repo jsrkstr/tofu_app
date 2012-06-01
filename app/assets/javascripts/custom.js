@@ -19,6 +19,8 @@ App = {
 
 		App.currentUserId = $("meta[name=user_id]").attr("content");
 
+		App.env = $("meta[name=env]").attr("content");
+
 		$("#new-tofu-button").bind("click", $.proxy(App.createTofu, App) );
 
 		$("#tofu_content").keydown($.proxy(function(e){
@@ -43,9 +45,9 @@ App = {
 		$("#received-tofus").append(App.receivedTofusView.render().el);
 		App.receivedTofus.reset(JSON.parse($("#bootstrapped-received-tofus").attr("data")));
 
+		var socketUrl = App.env == "development"? 'http://lh:3001' : 'http://tofuapp.cloudno.de';
+		var socket = io.connect(socketUrl);
 
-		var socket = io.connect('http://lh:3001');
-		
 		socket.on('connect', function () {
 			socket.emit("register", App.currentUserId, function(d){
 				console.log("connected to socket", d);
