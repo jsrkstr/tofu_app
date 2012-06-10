@@ -96,7 +96,7 @@
     }
 
   , matcher: function (item) {
-      item = "@" + item.split(",")[0];
+      item = "@" + item.name;
       var query_lower = this.query.toLowerCase();
       var regx = new RegExp
       regx.compile("(" + item + ")");
@@ -116,8 +116,8 @@
         , item
 
       while (item = items.shift()) {
-        if (!item.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item)
-        else if (~item.indexOf(this.query)) caseSensitive.push(item)
+        if (!item.name.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item)
+        else if (~item.name.indexOf(this.query)) caseSensitive.push(item)
         else caseInsensitive.push(item)
       }
 
@@ -134,10 +134,12 @@
       var that = this
 
       items = $(items).map(function (i, item) {
-        var split = item.split(",");
-        var item_value = split[0];
+        var item_value = item.name;
         i = $(that.options.item).attr('data-value', item_value)
-        i.find('a').html(that.highlighter(item_value))
+        var gravatar = '<img class="typeahead-gravatar" src="http://www.gravatar.com/avatar/' + item.gravatar + '?default=mm&size=16">';
+        if(item.type) 
+          gravatar = '<i class="icon-gift typeahead-gravatar"></i>';
+        i.find('a').html( gravatar + that.highlighter(item_value));
         return i[0]
       })
 

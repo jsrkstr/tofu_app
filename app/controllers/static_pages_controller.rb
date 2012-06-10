@@ -6,7 +6,6 @@ class StaticPagesController < ApplicationController
       @tofus = current_user.tofus.paginate(page: params[:page])
       @received_tofus = current_user.received_tofus.paginate(page: params[:page])
       @friends = current_user.friends
-      @commands = ["task,group", "reminder,group", "msg,group","question,group","high,priority", "low,priority", "moderate,priority"]
     end
   end
 

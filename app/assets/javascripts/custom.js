@@ -6,12 +6,15 @@ App = {
 
 	views :{},
 
-	// a hash for creating new tofu
-	newTOFU : {
-		group : "",
-		recipient_ids : ""
-		// priority : optional
-	},
+	commands : [
+		{ name : "task" , 		type : "group" },
+		{ name : "reminder" , 	type : "group" },
+		{ name : "msg" , 		type : "group" },
+		{ name : "question" , 	type : "group" },
+		{ name : "high", 		type : "priority" },
+		{ name : "low" , 		type : "priority" },
+		{ name : "moderate", 	type : "priority" }
+	],
 	
 
 	init : function(){
@@ -20,13 +23,6 @@ App = {
 		App.currentUserId = $("meta[name=user_id]").attr("content");
 
 		App.env = $("meta[name=env]").attr("content");
-
-		$("#new-tofu-button").bind("click", $.proxy(App.createTofu, App) );
-
-		$("#tofu_content").keydown($.proxy(function(e){
-			if(e.which == 13)
-				this.createTofu();
-		}, App) );
 
 		$("#connect-button").bind("click", $.proxy(App.connectUser, App) );
 		$("#disconnect-button").bind("click", $.proxy(App.disconnectUser, App) );
@@ -66,13 +62,22 @@ App = {
 				App.currentComments.add(data);
 		});
 
+		App.setupTofuForm();
+
+	},
+
+
+	setupTofuForm : function(){
+		var items = App.currentFriends.toJSON().concat(App.commands);
+		$("#tofu_content").typeahead({ source : items, items : 4 });
+		$("#tofu-form").bind("submit", $.proxy(App.createTofu, App) );
 	},
 
 
 	createTofu : function(){
-		this.parseContent();
+		var attrs = this.parseContent();
 
-		this.sentTofus.create(this.newTOFU, {
+		this.sentTofus.create(attrs, {
 			wait : true,
 			success : function(){
 				$("#tofu_content").val("");
@@ -82,24 +87,25 @@ App = {
 			}
 		});
 
-		// clear 
-		this.newTOFU = {
-			group : "",
-			recipient_ids : ""
-		};
-
 	},
 
 
 	parseContent : function(){
 
-		var data_source = JSON.parse($("#tofu_content").attr("data-source"));
-		var allValues = [];
-      	var allKeywords = data_source.map(function(i){
-      		var s = i.split(",");
-      		allValues.push(s[1]);
-      		return s[0];
-      	});
+		var allFriends = App.currentFriends.reduce(function(memo, item){
+			memo[item.get("name")] = item.id;
+			return memo;
+		}, {});
+
+		var allCommands = _.reduce(App.commands, function(memo, item){
+			memo[item.name] = item.type;
+			return memo;
+		}, {});
+
+		var attrs = {
+			recipient_ids : [],
+			group : ""
+		};
 
       	var starting_with_at = /^@/;
 
@@ -108,15 +114,23 @@ App = {
 
       	for (var i = splits.length - 1; i >= 0; i--) {
       		var keyword = splits[i].substr(1); // eg task, sachin (without @)
-      		var index = allKeywords.indexOf(keyword); // index Of Matched Keyword In AllKeywords
-      		if(starting_with_at.test(splits[i]) && index != -1){ // eg split[0] = @tast, @sachin
-      			content = content.replace(splits[i] + " ", "");
-      			this.addTofuAttr(allValues[index], keyword);
-      		}
+
+      		if(starting_with_at.test(splits[i])){
+
+	      		if(allFriends[keyword]){
+	      			attrs.recipient_ids.push(allFriends[keyword]); // push friend id
+	      		} else if(allCommands[keyword]){
+	      			attrs.group = allCommands[keyword]
+	      		}
+
+	      		content = content.replace(splits[i] + " ", "");
+	      	}
       	}
 
-      	this.addTofuAttr("content", content);
-      	this.newTOFU.created_at = new Date();
+      	attrs.content = content;
+      	attrs.created_at = new Date();
+
+      	return attrs;
 	},
 
 
@@ -355,6 +369,27 @@ App.collections.Comments = Backbone.Collection.extend({
 
 
 });
+
+
+App.collections.Friends = Backbone.Collection.extend({
+
+
+	url : "/friends",
+
+
+	initialize : function(args){
+		// this.fetch
+		// do something...
+	},
+
+
+	comparator : function(model){
+		return model;
+	}
+
+
+});
+
 
 
 	

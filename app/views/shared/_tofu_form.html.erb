@@ -1,7 +1,10 @@
 <div class="controls"></div>
 <div class="field well">
 <!-- <textarea cols="40" id="micropost_content" placeholder="Create new tofu..." rows="20"></textarea> -->
-<textarea data-provide="typeahead" cols="40" id="tofu_content" placeholder="Create new Tofu..." rows="20" data-source='<%= @friends.map { |n| n.name + "," + n.id.to_s }.concat(@commands).to_s %>' ></textarea>
-<input class="btn btn-large btn-primary" id="new-tofu-button" type="button" value="Done">
+<form class="tofu-form" onsubmit="return false">
+	<input cols="40" id="tofu_content" placeholder="Create new Tofu..." rows="20"></type>
+	<input class="btn btn-large btn-primary" id="new-tofu-button" type="submit" value="Done">
+</form>
+
 </div>
 <!-- ["sachin,1", "makuchaku,2", "task,group", "msg,group", "reminder,group"] -->

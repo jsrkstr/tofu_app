@@ -26,6 +26,9 @@
         <%#= render 'shared/tofus' %>
     </div>
   </div>
+  <script type="text/javascript">
+    App.currentFriends = new App.collections.Friends(<%= @friends.to_json.html_safe %>);
+  </script>
 
   <script type="text/template" id="tofu-template">
     <a href={{ "/users/" + user_id }}>

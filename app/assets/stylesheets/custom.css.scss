@@ -246,17 +246,22 @@ input, textarea, select, .uneditable-input {
 /* tofu form */
 
 #tofu-form {
-  textarea {
+  #tofu_content {
     height : 60px;
     margin-bottom : 5px;
     width : 87%
   }
 
-  input {
-    height : 60px
+  .btn {
+    height : 60px;
   }
 
   .controls {
     height : 0px
   }
+}
+
+.typeahead-gravatar {
+  float: left;
+  margin-right: 5px;
 }
