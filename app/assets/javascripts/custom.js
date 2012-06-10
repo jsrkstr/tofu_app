@@ -51,15 +51,19 @@ App = {
 		App.socket.on('connect', function () {
 			App.socket.emit("register", App.currentUserId, function(d){
 				console.log("connected to socket", d);
+				App.socket.emit("history", "comments", function(d){
+					App.currentComments.add(d);
+				});
 			});
 		});
 
 		App.socket.on("message", function(data){
-			if(data.group) // its a tofu
-				App.receivedTofus.add(data);
+			switch(data.group) {// its a tofu
+				case "comment" : App.currentComments.add(data);
+					break;
 
-			if(data.type)
-				App.currentComments.add(data);
+				default : App.receivedTofus.add(data);
+			}
 		});
 
 		App.setupTofuForm();
@@ -129,6 +133,7 @@ App = {
 
       	attrs.content = content;
       	attrs.created_at = new Date();
+      	attrs.recipient_ids = attrs.recipient_ids.toString();
 
       	return attrs;
 	},
@@ -220,22 +225,22 @@ App.models.Tofu = Backbone.Model.extend({
 		var recipient_ids = this.get("recipient_ids").split(",");
 		var index = recipient_ids.indexOf(App.currentUserId);
 
-		// remove authors id
+		//remove authors id
 		if(index != -1)
 			recipient_ids.splice(index, 1);
 
-		// add tofu's user id
+		//add tofu's user id
 		var uid = this.get("user_id");
 		if(uid != App.currentUserId)
 			recipient_ids.push(uid);
 
 		App.currentComments.create({
-			type : "comment",
+			group : "comment",
 			tofu_id : this.id,
 			content : content,
 			created_at : new Date(),
 			author_id : App.currentUserId,
-			recipient_ids : recipient_ids
+			recipient_ids : recipient_ids.toString()
 		}, {
 			wait : true
 		});
@@ -355,7 +360,7 @@ App.views.Tofu = Backbone.View.extend({
 
 App.collections.Comments = Backbone.Collection.extend({
 
-	backend : "comments",
+	url : "/comments",
 
 	initialize : function(args){
 		this.on("add", this.dispatch, this); //dispatch comment to corrent tofu

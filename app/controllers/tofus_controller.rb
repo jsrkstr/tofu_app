@@ -12,8 +12,8 @@ class TofusController < ApplicationController
 
       # send to all recipients
 
-      @tofu["recipient_ids"] = @tofu.recipient_ids.to_s.split(","); #convert to array after it is saved as string
       json_tofu = @tofu.to_json
+      @tofu["recipient_ids"] = @tofu.recipient_ids.to_s.split(","); #convert to array after it is saved as string
 
       # Constants
       if Rails.env == "development"

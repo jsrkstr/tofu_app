@@ -1,5 +1,7 @@
 SampleApp::Application.routes.draw do
 
+  resources :comments
+
   get "tofus/create"
 
   get "tofus/destroy"
@@ -10,6 +12,7 @@ SampleApp::Application.routes.draw do
   resources :relationships, only: [:create, :destroy]
   resources :tofus, only: [:create, :destroy]
   resources :friendships, only: [:create, :update, :destroy]
+  resources :comments, only: [:create]
 
   resources :users do
     member do

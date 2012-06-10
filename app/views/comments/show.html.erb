@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Content:</b>
+  <%= @comment.content %>
+</p>
+
+<p>
+  <b>Author:</b>
+  <%= @comment.author_id %>
+</p>
+
+<p>
+  <b>Recipient ids:</b>
+  <%= @comment.recipient_ids %>
+</p>
+
+<p>
+  <b>Group:</b>
+  <%= @comment.group %>
+</p>
+
+<p>
+  <b>Tofu:</b>
+  <%= @comment.tofu_id %>
+</p>
+
+<p>
+  <b>Updated at:</b>
+  <%= @comment.updated_at %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%= @comment.created_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_comment_path(@comment) %> |
+<%= link_to 'Back', comments_path %>
