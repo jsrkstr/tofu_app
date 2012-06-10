@@ -109,6 +109,14 @@ footer {
 
 /* miscellaneous */
 
+.f-left {
+  float : left;
+}
+
+.f-right {
+  float : right;
+}
+
 .debug_dump {
   clear: both;
   float: left;
@@ -221,26 +229,19 @@ input, textarea, select, .uneditable-input {
 .tofus {
   list-style: none;
   margin: 10px 0 0 0;
-
-  li {
-    padding: 10px 0;
-    border-top: 1px solid #e8e8e8;
-    cursor: pointer;
-    input {
-      margin-left: 60px;
-      margin-top: 10px;
-    }
-  }
 }
+
 .content {
   display: block;
 }
 .timestamp {
   color: $grayLight;
+  float : right;
 }
 .gravatar {
   float: left;
   margin-right: 10px;
+  border-radius : 4px;
 }
 
 /* tofu form */
@@ -264,4 +265,75 @@ input, textarea, select, .uneditable-input {
 .typeahead-gravatar {
   float: left;
   margin-right: 5px;
+}
+
+
+
+.accordion-group {
+  /*border : none;
+  border-top : 1px solid #E5E5E5;*/
+
+  .tofu-left {
+    float: left;
+    width: 42px;
+    margin-right: 10px;
+  }
+
+  .accordion-heading {
+    
+    a {
+      height : 30px;
+    }
+
+    .gravatar {
+      width : 30px;
+      float : left;
+    }
+
+    span {
+      float : left
+    }
+
+    .content {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 385px;
+    }
+  }
+
+  .accordion-inner {
+    .gravatar {
+      width : 42px;
+    }
+  }
+
+  .tofu-top {
+    min-height : 60px
+  }
+  
+  .comment-box {
+    height : 26px;
+    margin : 0px;
+  }
+
+  .comment-form {
+    margin : 0px;
+    padding-left : 60px;
+  }
+
+  .status {
+    i {
+      float : right;
+      margin: 4px;
+      margin-left: 10px;
+      cursor : pointer;
+    }
+  }
+
+  ul {
+    list-style : none;
+    margin-left: 60px;
+  }
+
 }

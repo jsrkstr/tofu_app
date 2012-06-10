@@ -273,7 +273,7 @@ App.collections.Tofus = Backbone.Collection.extend({
 
 App.views.Tofus = Backbone.View.extend({
 
-	tagName : "ol",
+	tagName : "div",
 
 	className : "tofus",
 
@@ -316,12 +316,16 @@ App.views.Tofu = Backbone.View.extend({
 
 	template : null,
 
-	tagName : "li",
+	tagName : "div",
+
+	className : "accordion-group",
 
 
 	events : {
-		"click" : "toggleInput",
-		"submit .comment-form" : "createComment"
+		"click i" : "toggleInput",
+		"submit .comment-form" : "createComment",
+		"hide" : "onHideShow",
+		"show" : "onHideShow"
 	},
 
 
@@ -351,7 +355,12 @@ App.views.Tofu = Backbone.View.extend({
 
 	toggleInput : function(e){
 		if(!$(e.target).hasClass("comment-box"))
-			this.$("input").toggle();
+			this.$("input").slideToggle(100);
+	},
+
+
+	onHideShow : function(e){
+		this.$(".accordion-heading").toggle("fast");
 	}
 
 });
