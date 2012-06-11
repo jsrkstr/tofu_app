@@ -6,8 +6,6 @@ gem 'bcrypt-ruby', '3.0.1'
 gem 'faker', '1.0.1'
 gem 'will_paginate', '3.0.3'
 gem 'bootstrap-will_paginate', '0.0.6'
-# gem "pubnub-ruby", "~> 0.0.9"
-# gem "pusher", "~> 0.9.4"
 gem "em-http-request", "~> 1.0.2"
 
 

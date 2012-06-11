@@ -15,6 +15,8 @@ App = {
 		{ name : "low" , 		type : "priority" },
 		{ name : "moderate", 	type : "priority" }
 	],
+
+	milestones : {}, // track application milestones
 	
 
 	init : function(){
@@ -54,6 +56,7 @@ App = {
 				console.log("connected to socket", d);
 				App.socket.emit("history", "comments", function(d){
 					App.currentComments.add(d);
+					App.markMilestone("comments-loaded");
 				});
 			});
 		});
@@ -191,6 +194,16 @@ App = {
 				console.log("error in disconnecting");
 			}
 		});
+	},
+
+
+	markMilestone : function(what){
+		this.milestones[what] = true;
+	},
+
+
+	isMilestone : function(which){
+		return this.milestones[which] || false;
 	}
 
 
@@ -348,6 +361,8 @@ App.views.Tofu = Backbone.View.extend({
 		"click" : "glitter"
 	},
 
+	open : false, // track state of collapsible
+
 
 	initialize : function(args){
 		this.template =  _.template($("#tofu-template").html());
@@ -368,7 +383,7 @@ App.views.Tofu = Backbone.View.extend({
 
 	renderOpen : function(){
 		this.render();
-		this.$(".collapse").collapse("show");
+		// this.$(".collapse").collapse("show");
 	},
 
 
@@ -380,6 +395,10 @@ App.views.Tofu = Backbone.View.extend({
 
 	addComment : function(model){
 		this.$(".comments").append(this.commentTemplate(model.toJSON()));
+		if(!this.isOpen() && App.isMilestone("comments-loaded")){
+			this.$(".collapse").collapse('show');
+			this.glitter(true);
+		}
 	},
 
 
@@ -391,10 +410,16 @@ App.views.Tofu = Backbone.View.extend({
 
 	onHide : function(e){
 		this.$(".accordion-heading").slideDown("fast");
+		this.open = false;
 	},
 
 	onShow : function(){
 		this.$(".accordion-heading").slideUp("fast");	
+		this.open = true;
+	},
+
+	isOpen : function(){
+		return this.open;
 	},
 
 	changeTaskStatus : function(e){

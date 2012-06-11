@@ -43,6 +43,7 @@ class TofusController < ApplicationController
     @tofu = Tofu.find(params[:id])    
 
     if @tofu.update_attributes(params[:tofu])
+
       # send to all recipients
 
       recipient_ids = @tofu.recipient_ids.to_s.split(","); #convert to array after it is saved as string
@@ -76,7 +77,7 @@ class TofusController < ApplicationController
           EM.stop
         }
       end
-
+      
       respond_with @tofu
     else
       respond_with @tofu
