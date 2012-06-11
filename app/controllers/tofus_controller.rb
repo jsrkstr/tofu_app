@@ -11,9 +11,8 @@ class TofusController < ApplicationController
   	if @tofu.save
 
       # send to all recipients
-
-      json_tofu = @tofu.to_json
-      @tofu["recipient_ids"] = @tofu.recipient_ids.to_s.split(","); #convert to array after it is saved as string
+      recipient_ids = @tofu.recipient_ids.to_s.split(","); #convert to array after it is saved as string
+      # json = ActiveSupport::JSON
 
       # Constants
       if Rails.env == "development"
@@ -23,15 +22,13 @@ class TofusController < ApplicationController
       end
 
       EM.run do
-        @tofu.recipient_ids.each do |id|
-          http = EM::HttpRequest.new(realtime_server_pub_url).post :body => {"data" => json_tofu}
-          http.callback {
-            EM.stop
-          }
-          http.errback {
-            EM.stop
-          }
-        end
+        http = EM::HttpRequest.new(realtime_server_pub_url).post :body => { "recipient_ids" => recipient_ids, "message" => @tofu.to_json}
+        http.callback {
+          EM.stop
+        }
+        http.errback {
+          EM.stop
+        }
       end
 
       respond_with @tofu
@@ -40,6 +37,52 @@ class TofusController < ApplicationController
   	end
 
   end
+
+
+  def update
+    @tofu = Tofu.find(params[:id])    
+
+    if @tofu.update_attributes(params[:tofu])
+      # send to all recipients
+
+      recipient_ids = @tofu.recipient_ids.to_s.split(","); #convert to array after it is saved as string
+
+      if @tofu.user_id != current_user.id
+
+        # remove current user from recipients
+        recipient_ids.delete_if { |item|      
+          current_user.id.to_s == item
+        }
+
+        # add author
+        recipient_ids.push(@tofu.user_id.to_s)
+      end
+
+
+      # Constants
+      if Rails.env == "development"
+        realtime_server_pub_url = "http://lh:3001/publish"
+      else
+        realtime_server_pub_url = "http://tofuapp.cloudno.de/publish"
+      end
+
+      EM.run do
+        
+        http = EM::HttpRequest.new(realtime_server_pub_url).post :body => { "recipient_ids" => recipient_ids, "message" => @tofu.to_json}
+        http.callback {
+          EM.stop
+        }
+        http.errback {
+          EM.stop
+        }
+      end
+
+      respond_with @tofu
+    else
+      respond_with @tofu
+    end
+  end
+
 
   def destroy
 

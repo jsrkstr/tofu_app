@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
 
     @comment.id = Time.now.to_i
 
-    json_comment = @comment.to_json
+    recipient_ids = @comment.recipient_ids.split(",")
 
     respond_to do |format|
         format.json { render json: @comment, status: :created, location: @comment }
@@ -32,15 +32,13 @@ class CommentsController < ApplicationController
       end
 
       EM.run do
-        @comment.recipient_ids.split(",").each do |id|
-          http = EM::HttpRequest.new(realtime_server_pub_url).post :body => {"data" => json_comment}
-            http.callback {
-              EM.stop
-            }
-            http.errback {
-              EM.stop
-            }
-        end
+        http = EM::HttpRequest.new(realtime_server_pub_url).post :body => {"recipient_ids" => recipient_ids, "message" => @comment.to_json}
+        http.callback {
+          EM.stop
+        }
+        http.errback {
+          EM.stop
+        }
       end
 
     end

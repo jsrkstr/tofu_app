@@ -32,33 +32,57 @@
 
   <script type="text/template" id="tofu-template">
     <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-target={{ "#collapse-" + id }} data-parent=".tofus">
-        <img src={{ user_gravatar }} class="gravatar">
-        <span class="content">{{ content }}</span>
+      <a class="accordion-toggle" data-toggle="collapse" data-target={{= "#collapse-" + id }} data-parent=".tofus">
+        <img src={{= user_gravatar }} class="gravatar">
+        <span class="content">{{= content }}</span>
       </a>
     </div>
 
-    <div id={{ "collapse-" + id }} class="collapse">
+    <div id={{= "collapse-" + id }} class="collapse">
       <div class="accordion-inner">
 
         <div class="tofu-top">
           <div class="tofu-left">
-            <a href={{ "/users/" + user_id }}>
-              <img src={{ user_gravatar }} class="gravatar">
+            <a href={{= "/users/" + user_id }}>
+              <img src={{= user_gravatar }} class="gravatar">
             </a>
-            <span class="label">{{ group }}<border/span>
+            <span class="label">{{= group }}<border/span>
           </div>    
 
-          <div>
+          <div class="tofu-mid">
+            {{ if(group == "task"){ }}
+              <div class="buttons">
+                {{ if(user_id != App.currentUserId ){ // in case of recipients }}
+                  {{ if(status == "new"){ }}
+                    <button class="accepted-task btn btn-small btn-primary">Accept</button>
+                  {{ } }}
+                  {{ if( status == "declined" || status == "new" ){ }}
+                    <button class="declined-task btn btn-small" {{= status == 'declined'? 'disabled>Declined' : '>Decline' }}</button>
+                  {{ } }}
+                  {{ if(status == "accepted" || status == "done"){ }}
+                    <button class="done-task btn btn-small btn-success" {{= status == "done"? "disabled" : "" }}>Done</button>
+                  {{ } }}
+                {{ } else { // in case of authors }}
+                  {{ if(status == "new"){ }}
+                    <button class="btn btn-small" disabled>Pending</button>
+                  {{ } else if( status == "accepted"){ }}
+                    <button class="btn btn-small btn-info" disabled>Accepted</button>
+                  {{ } else if( status == "done"){ }}
+                    <button class="btn btn-small btn-success" disabled>Done</button>
+                  {{ } }}
+                {{ } }}
+              </div>
+            {{ } }}
+
             <span class="user">
-              <a href={{ "/users/" + user_id }} class="name">{{ user_name}}</a>
+              <a href={{= "/users/" + user_id }} class="name">{{= user_name }}</a>
             </span>
-            <span class="content">{{ content }}</span>
+            <span class="content">{{= content }}</span>
           </div>
 
           <div class="status">
             <i class="icon-comment"></i>
-            <span class="timestamp">{{ timestamp }}</span>
+            <span class="timestamp">{{= timestamp }}</span>
           </div>
 
         </div>
@@ -75,8 +99,8 @@
 
   <script type="text/template" id="comment-template">
     <li>
-      <a href={{ "/users/" + author_id }} ><img class="avatar" src="http://www.gravatar.com/avatar/{{ undefined }}?d=mm&s=22">{{ author_id }}</a>
-      <span>{{ content }}</span>
+      <a href={{= "/users/" + author_id }} ><img class="avatar" src="http://www.gravatar.com/avatar/{{ undefined }}?d=mm&s=22">{{= author_id }}</a>
+      <span>{{= content }}</span>
     </li>
   </script>
 <% else %>

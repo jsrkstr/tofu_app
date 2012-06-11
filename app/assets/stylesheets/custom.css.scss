@@ -273,7 +273,6 @@ input, textarea, select, .uneditable-input {
 }
 
 
-
 .accordion-group {
   /*border : none;
   border-top : 1px solid #E5E5E5;*/
@@ -310,6 +309,9 @@ input, textarea, select, .uneditable-input {
   }
 
   .accordion-inner {
+
+    border-top : none;
+
     .gravatar {
       width : 42px;
     }
@@ -318,6 +320,10 @@ input, textarea, select, .uneditable-input {
   .tofu-top {
     min-height : 60px
   }
+
+  .tofu-mid {
+    min-height : 42px
+  }
   
   .comment-box {
     height : 26px;
@@ -325,7 +331,7 @@ input, textarea, select, .uneditable-input {
   }
 
   .comment-form {
-    margin : 0px;
+    margin : 5px 0px 0px 0px;
     padding-left : 60px;
   }
 
@@ -352,6 +358,11 @@ input, textarea, select, .uneditable-input {
       float : left;
       margin-right : 5px
     }
+  }
+
+  .buttons {
+    float : right;
+    margin : 3px 0px 5px 10px;
   }
 
 }

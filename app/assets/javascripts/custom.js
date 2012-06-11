@@ -28,7 +28,8 @@ App = {
 		$("#disconnect-button").bind("click", $.proxy(App.disconnectUser, App) );
 
 		_.templateSettings = {
-		  interpolate : /\{\{(.+?)\}\}/g
+		  interpolate : /\{\{\=(.+?)\}\}/g,
+		  evaluate : /\{\{(.+?)\}\}/g
 		};
 
 
@@ -62,7 +63,10 @@ App = {
 				case "comment" : App.currentComments.add(data);
 					break;
 
-				default : App.receivedTofus.add(data);
+				default : if(App.sentTofus.get(data.id)) // updated
+							App.sentTofus.forceAdd(data);
+						else //new
+							App.receivedTofus.add(data);
 			}
 		});
 
@@ -124,7 +128,7 @@ App = {
 	      		if(allFriends[keyword]){
 	      			attrs.recipient_ids.push(allFriends[keyword]); // push friend id
 	      		} else if(allCommands[keyword]){
-	      			attrs.group = allCommands[keyword]
+	      			attrs.group = keyword;
 	      		}
 
 	      		content = content.replace(splits[i] + " ", "");
@@ -197,7 +201,8 @@ App.models.Tofu = Backbone.Model.extend({
 
 	defaults : {
 		group : "msg",
-		priority : "moderate"
+		priority : "moderate",
+		status : "new"
 	},
 
 
@@ -265,6 +270,16 @@ App.collections.Tofus = Backbone.Collection.extend({
 
 	comparator : function(model){
 		return (new Date(model.get("updated_at"))).getTime();
+	},
+
+	// add even if there is one existing
+	forceAdd : function(model){
+		var tofu = this.get(model.id);
+		if(tofu){
+			tofu.set(model);
+		} else{
+			this.add(model);
+		}
 	}
 
 
@@ -307,7 +322,7 @@ App.views.Tofus = Backbone.View.extend({
 		var el = view.render().el;
 		$(el).hide();
 		$(this.el).prepend(el);
-		$(el).slideToggle();
+		$(el).slideDown("slow");
 	}
 
 });
@@ -327,8 +342,10 @@ App.views.Tofu = Backbone.View.extend({
 	events : {
 		"click i" : "toggleInput",
 		"submit .comment-form" : "createComment",
-		"hide" : "onHideShow",
-		"show" : "onHideShow"
+		"hide" : "onHide",
+		"show" : "onShow",
+		"click .accepted-task, .declined-task, .done-task" : "changeTaskStatus",
+		"click" : "glitter"
 	},
 
 
@@ -336,6 +353,10 @@ App.views.Tofu = Backbone.View.extend({
 		this.template =  _.template($("#tofu-template").html());
 		this.model.on("add:comment", this.addComment, this);
 		this.commentTemplate = _.template($("#comment-template").html());
+		this.model.on("change", this.renderOpen, this);
+		this.model.on("change:status", function(){
+			this.glitter(true);
+		}, this);
 	},
 
 
@@ -345,9 +366,15 @@ App.views.Tofu = Backbone.View.extend({
 	},
 
 
+	renderOpen : function(){
+		this.render();
+		this.$(".collapse").collapse("show");
+	},
+
+
 	createComment : function(){
 		this.model.createComment(this.$(".comment-box").val());
-		return false;
+		this.$(".comment-box").val("");
 	},
 
 
@@ -362,8 +389,42 @@ App.views.Tofu = Backbone.View.extend({
 	},
 
 
-	onHideShow : function(e){
-		this.$(".accordion-heading").toggle("fast");
+	onHide : function(e){
+		this.$(".accordion-heading").slideDown("fast");
+	},
+
+	onShow : function(){
+		this.$(".accordion-heading").slideUp("fast");	
+	},
+
+	changeTaskStatus : function(e){
+		this.model.set({status : $(e.target).attr("class").split("-")[0] }, {silent : true}).save();
+	},
+
+	glitter : function(arg){
+		this.glittering = arg == true ? true : false;
+		if(this.glittering)
+			this.glitterAnimate("1"); // start
+	},
+
+	glitterAnimate : function(val){
+		$(this.el).animate({
+			'border-color-oo': val
+		},
+		{
+			duration : "slow",
+			complete : $.proxy(function(){
+				if(this.glittering)
+					this.glitterAnimate($(this.el).css("box-shadow") == "none"? "1" : "0.3");
+				else
+					$(this.el).css({'border-color': '#E5E5E5', 'box-shadow': 'none'});
+			}, this),
+			step: function(now, fx) {
+				$(fx.elem).css({'border-color': 'rgba(82, 168, 236, '+ now +')', 'box-shadow': 'inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 ' + now*20 +'px rgba(82, 168, 236, 0.6)'});
+				if(now == 0.3)
+					$(fx.elem).css({'box-shadow': 'none'});
+			}
+		});	
 	}
 
 });
