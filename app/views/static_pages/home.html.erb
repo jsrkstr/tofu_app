@@ -1,14 +1,14 @@
 <% if signed_in? %>
   <div class="row">
-    <aside class="span4">
+    <aside class="span3">
       <section>
         <%= render 'shared/user_info' %>
       </section>
       <section>
-        <%= render 'shared/stats' %>
+        <%#= render 'shared/stats' %>
       </section>
     </aside>
-    <aside class="span8">
+    <aside class="span9">
       <section id="tofu-form">
         <%= render 'shared/tofu_form' %>
       </section>
@@ -31,49 +31,51 @@
   </script>
 
   <script type="text/template" id="tofu-template">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-target={{ "#collapse-" + id }} data-parent=".tofus">
-            <img src={{ user_gravatar }} class="gravatar">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-target={{ "#collapse-" + id }} data-parent=".tofus">
+        <img src={{ user_gravatar }} class="gravatar">
+        <span class="content">{{ content }}</span>
+      </a>
+    </div>
+
+    <div id={{ "collapse-" + id }} class="collapse">
+      <div class="accordion-inner">
+
+        <div class="tofu-top">
+          <div class="tofu-left">
+            <a href={{ "/users/" + user_id }}>
+              <img src={{ user_gravatar }} class="gravatar">
+            </a>
+            <span class="label">{{ group }}<border/span>
+          </div>    
+
+          <div>
+            <span class="user">
+              <a href={{ "/users/" + user_id }} class="name">{{ user_name}}</a>
+            </span>
             <span class="content">{{ content }}</span>
-          </a>
-        </div>
-        <div id={{ "collapse-" + id }} class="collapse">
-          <div class="accordion-inner">
-
-                  <div class="tofu-top">
-                      <div class="tofu-left">
-                        <a href={{ "/users/" + user_id }}>
-                          <img src={{ user_gravatar }} class="gravatar">
-                        </a>
-                        <span class="label">{{ group }}<border/span>
-                      </div>
-                      
-                    <div>
-                      <span class="user">
-                        <a href={{ "/users/" + user_id }} class="name">{{ user_name}}</a>
-                      </span>
-                      <span class="content">{{ content }}</span>
-                    </div>
-
-                    <div class="status">
-                      <i class="icon-comment"></i>
-                      <span class="timestamp">{{ timestamp }}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <ul class="comments"></ul>
-                    <form class="comment-form" onsubmit="return false">
-                      <input type="text" class="span5 hide comment-box" placeholder="Type something…">
-                    </form>
-                  </div>
           </div>
+
+          <div class="status">
+            <i class="icon-comment"></i>
+            <span class="timestamp">{{ timestamp }}</span>
+          </div>
+
         </div>
+
+        <div>
+          <ul class="comments"></ul>
+          <form class="comment-form" onsubmit="return false">
+            <input type="text" class="span5 hide comment-box" placeholder="Type something…">
+          </form>
+        </div>
+      </div>
+    </div>
   </script>
 
   <script type="text/template" id="comment-template">
     <li>
-      <a href={{ "/users/" + author_id }} >{{ "@" + author_id }}</a>
+      <a href={{ "/users/" + author_id }} ><img class="avatar" src="http://www.gravatar.com/avatar/{{ undefined }}?d=mm&s=22">{{ author_id }}</a>
       <span>{{ content }}</span>
     </li>
   </script>

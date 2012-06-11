@@ -304,7 +304,10 @@ App.views.Tofus = Backbone.View.extend({
 
 	addOne : function(model){
 		var view = new App.views.Tofu({model : model});
-		$(this.el).prepend(view.render().el);
+		var el = view.render().el;
+		$(el).hide();
+		$(this.el).prepend(el);
+		$(el).slideToggle();
 	}
 
 });

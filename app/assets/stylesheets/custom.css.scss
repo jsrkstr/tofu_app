@@ -246,15 +246,20 @@ input, textarea, select, .uneditable-input {
 
 /* tofu form */
 
-#tofu-form {
+.tofu-form {
+
+  margin : 0px;
+
   #tofu_content {
-    height : 60px;
-    margin-bottom : 5px;
+    height : 37px;
+    margin : 0px;
     width : 87%
   }
 
   .btn {
-    height : 60px;
+    margin : 0px;
+    margin-left: -1px;
+    border-radius: 0 3px 3px 0;
   }
 
   .controls {
@@ -280,6 +285,8 @@ input, textarea, select, .uneditable-input {
   }
 
   .accordion-heading {
+
+    cursor : pointer;
     
     a {
       height : 30px;
@@ -334,6 +341,17 @@ input, textarea, select, .uneditable-input {
   ul {
     list-style : none;
     margin-left: 60px;
+    margin-bottom : 0px;
+
+    li {
+      min-height : 16px;
+    }
+
+    .avatar {
+      width : 16px;
+      float : left;
+      margin-right : 5px
+    }
   }
 
 }
