@@ -75,11 +75,7 @@ App = {
 
 		App.setupTofuForm();
 
-		App.currentCommandLine = new App.views.CommandLine({ 
-			comments : App.currentComments,
-			receivedTofus : App.receivedTofus,
-			sentTofus : App.sentTofus
-		});
+		App.currentCommandLine = new App.views.CommandLine();
 
 	},
 
@@ -267,6 +263,8 @@ App.models.Tofu = Backbone.Model.extend({
 			created_at : new Date(),
 			author_id : App.currentUserId,
 			recipient_ids : recipient_ids.toString()
+		}, {
+			wait : true
 		});
 	}
 
@@ -417,13 +415,13 @@ App.views.Tofu = Backbone.View.extend({
 	onHide : function(e){
 		this.$(".accordion-heading").slideDown("fast");
 		this.open = false;
-		this.model.collection.trigger("close", this); // pass the view object
+		this.model.collection.trigger("closed", this); // pass the view object
 	},
 
 	onShow : function(){
 		this.$(".accordion-heading").slideUp("fast");	
 		this.open = true; 
-		this.model.collection.trigger("open", this); // pass the view object
+		this.model.collection.trigger("opened", this); // pass the view object
 	},
 
 	isOpen : function(){
@@ -520,11 +518,10 @@ App.views.CommandLine = Backbone.View.extend({
 	initialize : function(args){
 		$(this.el).jixedbar();
 
-		this.comments = args.comments;
-		args.receivedTofus.on("open", this.loadComments, this);
-		args.sentTofus.on("open", this.loadComments, this);
-		args.receivedTofus.on("close", this.unloadComments, this);
-		args.sentTofus.on("close", this.unloadComments, this);
+		App.receivedTofus.on("opened", this.loadComments, this);
+		App.sentTofus.on("opened", this.loadComments, this);
+		// App.receivedTofus.on("closed", this.unloadComments, this);
+		// App.sentTofus.on("closed", this.unloadComments, this);
 
 		this.commentTemplate = _.template($("#comment-template").html());
 	},
@@ -538,20 +535,20 @@ App.views.CommandLine = Backbone.View.extend({
 
 	loadComments : function(view){
 		this.unloadComments(); // unload previously loaded comments
-		var comments = this.comments.filter(function(comment){
+		var comments = App.currentComments.filter(function(comment){
 			return comment.get("tofu_id") == view.model.id;
 		});
 
 		_.each(comments, this.addComment, this);
 
-		var channel = "add" + view.model.id; // channel for a tofu's comments
-		this.comments.on(channel, this.addComment, this);
+		this.currentTofuChannel = "add:" + view.model.id; // channel for a tofu's comments
+		App.currentComments.on(this.currentTofuChannel, this.addComment, this);
 	},
 
 
 	unloadComments : function(view){
 		this.$("#cmd-chat").empty();
-		this.comments.off(); // stop listening on for loaded tofu's channel
+		App.currentComments.off(this.currentTofuChannel || "fakechannel"); // stop listening on for loaded tofu's channel
 	},
 
 
