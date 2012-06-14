@@ -60,19 +60,21 @@
                     <button class="declined-task btn btn-small" {{= status == 'declined'? 'disabled>Declined' : '>Decline' }}</button>
                   {{ } }}
                   {{ if(status == "accepted" || status == "done"){ }}
-                    <div class="btn-group {{= status == 'done' ? 'hide' : '' }}">
-                      <a class="btn dropdown-toggle btn-warning" data-toggle="dropdown" href="#">
-                        Remind In
-                        <span class="caret"></span>
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)" val="5">5 mins</a></li>
-                        <li><a href="javascript:void(0)" val="10">10 mins</a></li>
-                        <li><a href="javascript:void(0)" val="15">15 mins</a></li>
-                        <li><a href="javascript:void(0)" val="30">30 mins</a></li>
-                        <li><a href="javascript:void(0)" val="60">1 hour</a></li>
-                      </ul>
-                    </div>
+                    {{ if(status == 'accepted'){ }}
+                      <div class="btn-group">
+                        <a class="btn dropdown-toggle btn-warning" data-toggle="dropdown" href="#">
+                          Remind In
+                          <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a href="javascript:void(0)" val="5">5 mins</a></li>
+                          <li><a href="javascript:void(0)" val="10">10 mins</a></li>
+                          <li><a href="javascript:void(0)" val="15">15 mins</a></li>
+                          <li><a href="javascript:void(0)" val="30">30 mins</a></li>
+                          <li><a href="javascript:void(0)" val="60">1 hour</a></li>
+                        </ul>
+                      </div>
+                    {{ } }}
                     <button class="done-task btn btn-small btn-success" {{= status == "done"? "disabled" : "" }}>Done</button>
                   {{ } }}
                 {{ } else { // in case of authors }}
