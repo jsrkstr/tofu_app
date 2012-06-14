@@ -1,12 +1,14 @@
-<a href="<%= user_path(current_user) %>">
-  <%= gravatar_for current_user %>
-</a>
-<h1>
-  <%= current_user.name %>
-</h1>
-<span>
-  <%= link_to "view my profile", current_user %>
-</span>
-<span>
-  <%= pluralize(current_user.microposts.count, "micropost") %>
-</span>
+<li id="fat-menu" class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+  	<%= gravatar_for current_user %>
+    <%= current_user.name %> <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li><%= link_to "Profile", current_user %></li>
+    <li><%= link_to "Settings", edit_user_path(current_user) %></li>
+    <li class="divider"></li>
+    <li>
+      <%= link_to "Sign out", signout_path, method: "delete" %>
+    </li>
+  </ul>
+</li>

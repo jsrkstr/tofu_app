@@ -278,6 +278,8 @@ input, textarea, select, .uneditable-input {
   /*border : none;
   border-top : 1px solid #E5E5E5;*/
 
+  margin-bottom : 4px;
+
   .tofu-left {
     float: left;
     width: 42px;
@@ -286,10 +288,13 @@ input, textarea, select, .uneditable-input {
 
   .accordion-heading {
 
+    background-color : whiteSmoke;
+
     cursor : pointer;
     
     a {
       height : 30px;
+      padding : 4px 7px;
     }
 
     .gravatar {
@@ -298,7 +303,8 @@ input, textarea, select, .uneditable-input {
     }
 
     span {
-      float : left
+      float : left;
+      margin-top : 5px;
     }
 
     .content {
@@ -407,7 +413,7 @@ input, textarea, select, .uneditable-input {
     bottom: 47px;
     padding : 5px 10px;
     background-color: #fff;
-    box-shadow: #AAA 1px -3px 11px;
+    box-shadow: #999 1px -3px 11px;
     border:  #B5B5B5 solid 1px;
     -webkit-border-top-right-radius: 5px;
     -khtml-border-radius-topright: 5px;
@@ -420,6 +426,10 @@ input, textarea, select, .uneditable-input {
     border-bottom: none;
     display : none;
     overflow-y : auto;
+    border-top-width : 10px;
+    border-top-color : #fff;
+    border-left-color : #fff;
+    border-right-color : #fff;
 
     li {
       width : 97%;
@@ -445,3 +455,10 @@ input, textarea, select, .uneditable-input {
 
 
 /* command line */
+
+#fat-menu {
+  .gravatar {
+    width : 23px;
+    border-radius : 0px;
+  }
+}

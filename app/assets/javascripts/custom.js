@@ -80,31 +80,6 @@ App = {
 	},
 
 
-	// setupTofuForm : function(){
-
-	// 	var items = App.currentFriends.toJSON().concat(App.commands);
-	// 	$("#jx-tofu_content").typeahead({ source : items, items : 4 });
-	// 	$(".jx-tofu-form").bind("submit", $.proxy(App.createTofu, App) );
-	// 	$("#jx-new-tofu-button").click($.proxy(App.createTofu, App) );
-	// },
-
-
-	// createTofu : function(){
-	// 	var attrs = this.parseContent();
-
-	// 	this.sentTofus.create(attrs, {
-	// 		wait : true,
-	// 		success : function(){
-	// 			$("#jx-tofu_content").val("");
-	// 		},
-	// 		error : function(){
-	// 			$("#jx-tofu_content").val("");
-	// 		}
-	// 	});
-
-	// },
-
-
 	addTofuAttr : function(item_type, item_value){
 		switch(item_type){
 			case "group" : attr = this.newTOFU.group = item_value;
@@ -548,9 +523,14 @@ App.views.CommandLine = Backbone.View.extend({
 
 
 		this.currentTofuChannel = "add:" + view.model.id; // channel for a tofu's comments
-		App.currentComments.on(this.currentTofuChannel, this.addComment, this);
+		App.currentComments.on(this.currentTofuChannel, function(comment){
+			this.addComment(comment);
+			this.$("#cmd-chat").animate({scrollTop : "1000"});
+		}, this);
+
 		this.loadedTofuView = view;
 		this.trigger("change:tofu", true);
+		this.$("#jx-tofu_content").focus();
 	},
 
 
