@@ -349,6 +349,11 @@ input, textarea, select, .uneditable-input {
       margin-left: 10px;
       cursor : pointer;
     }
+
+    .dropdown-toggle {
+
+    }
+
   }
 
   ul {
@@ -370,6 +375,29 @@ input, textarea, select, .uneditable-input {
   .buttons {
     float : right;
     margin : 3px 0px 5px 10px;
+
+    .btn-group {
+      float : left;
+      margin-right : 5px;
+      max-width : 102px;
+      .btn {
+        float : right;
+      }
+      .faker {
+        border-radius : 4px;
+      }
+    }
+
+    .dropdown-menu {
+      position : relative;
+      margin-left : 0px;
+      float : right;
+      min-width : 88px
+    }
+
+    .done-task {
+      float : right;
+    }
   }
 
 }

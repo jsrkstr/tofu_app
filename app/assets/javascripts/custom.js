@@ -292,7 +292,8 @@ App.views.Tofu = Backbone.View.extend({
 		"hide" : "onHide",
 		"show" : "onShow",
 		"click .accepted-task, .declined-task, .done-task" : "changeTaskStatus",
-		"click" : "glitter"
+		"click" : "glitter",
+		"click .dropdown-menu" : "onDropDown"
 	},
 
 	open : false, // track state of collapsible
@@ -312,6 +313,7 @@ App.views.Tofu = Backbone.View.extend({
 
 	render : function(){
 		$(this.el).html(this.template(this.model.toJSON())).attr("id", this.model.id);
+		this.checkReminder();
 		return this;
 	},
 
@@ -335,12 +337,6 @@ App.views.Tofu = Backbone.View.extend({
 			this.glitter(true);
 		}
 	},
-
-
-	// toggleInput : function(e){
-	// 	if(!$(e.target).hasClass("comment-box"))
-	// 		this.$("input").slideToggle(100);
-	// },
 
 
 	onHide : function(e){
@@ -398,6 +394,39 @@ App.views.Tofu = Backbone.View.extend({
 					$(fx.elem).css({'box-shadow': 'none'});
 			}
 		});	
+	},
+
+
+	onDropDown : function(e){
+		var mins = parseInt($(e.target).attr("val"));
+		var ms = mins * 60 * 1000;
+		var time = Date.now() + ms;
+		this.setReminder(time);
+	},
+
+
+	checkReminder : function(){
+		var time = localStorage.getItem("alarm_time_tofu_" + this.model.id);
+		if(time)
+			this.setReminder(time);
+	},
+
+
+	//accepts timestamp
+	setReminder : function(time){
+		var ms = time - Date.now();
+		window.setTimeout($.proxy(this.goReminder, this), ms); // set timer
+		localStorage.setItem("alarm_time_tofu_" + this.model.id, time); // save in localstorage to handle page relaods
+		this.$(".dropdown-toggle").hide();
+		this.$(".btn-group").prepend('<a class="faker btn btn-warning" href="#" disabled >Reminder Set</a>');
+	},
+
+
+	goReminder : function(){
+		this.glitter(true);
+		this.$(".dropdown-toggle").show();
+		this.$(".faker").remove();
+		localStorage.removeItem("alarm_time_tofu_" + this.model.id); // remove from localstorage
 	}
 
 });
