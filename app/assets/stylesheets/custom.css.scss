@@ -380,7 +380,7 @@ input, textarea, select, .uneditable-input {
   #jx-tofu-form-div {
     margin: 0px;
     padding: 2px 5px;
-    width: 792px;
+    width: 867px;
 
     form {
 
@@ -419,6 +419,26 @@ input, textarea, select, .uneditable-input {
     border-top-left-radius: 5px;
     border-bottom: none;
     display : none;
+    overflow-y : auto;
+
+    li {
+      width : 97%;
+      padding : 3px;
+      border : none;
+      border-top : 1px solid #cecece;
+      border-radius : 0px;
+      cursor : auto;
+
+      .avatar {
+        float : left;
+        margin-right : 5px
+      }
+
+      span {
+        background-color : initial;
+      }
+    }
+
   }
 
 }

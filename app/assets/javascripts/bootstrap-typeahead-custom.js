@@ -59,7 +59,7 @@
         bottom : 45
         //top: pos.top - 110 //+ pos.height
       , left: pos.left
-      //, position : "fixed"
+      , position : "fixed"
       , top : "initial"
       })
 
