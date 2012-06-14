@@ -272,6 +272,7 @@ input, textarea, select, .uneditable-input {
   margin-right: 5px;
 }
 
+/* tofu lists */
 
 .accordion-group {
   /*border : none;
@@ -366,3 +367,58 @@ input, textarea, select, .uneditable-input {
   }
 
 }
+
+
+/* command line */
+
+#command-line {
+
+  overflow : initial !important;
+  padding: 3px 0px;
+
+  #jx-tofu-form-div {
+    margin: 0px;
+    padding: 2px 5px;
+    width: 792px;
+
+    form {
+
+      #jx-tofu_content {
+        height : 36px;
+      }
+    }
+  }
+
+  .btn {
+    margin: 2px 2px;
+    height: 36px;
+  }
+
+  li {
+    padding : 8px;
+  }
+
+  #cmd-chat {
+    position: absolute;
+    width: 804px;
+    height: 100px;
+    left: 40px;
+    bottom: 46px;
+    background-color:  #E5E5E5;
+    border:  #B5B5B5 solid 1px;
+    -webkit-border-top-right-radius: 5px;
+    -khtml-border-radius-topright: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-right-radius: 5x;
+    -webkit-border-top-left-radius: 5px;
+    -khtml-border-radius-topleft: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-left-radius: 5px;
+    border-bottom: none;
+    display : none;
+  }
+
+}
+
+
+/* command line */

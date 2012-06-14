@@ -56,8 +56,11 @@
       })
 
       this.$menu.css({
-        top: pos.top + pos.height
+        bottom : 45
+        //top: pos.top - 110 //+ pos.height
       , left: pos.left
+      //, position : "fixed"
+      , top : "initial"
       })
 
       this.$menu.show()
@@ -131,9 +134,10 @@
     }
 
   , render: function (items) {
+
       var that = this
 
-      items = $(items).map(function (i, item) {
+      items = $(items.reverse()).map(function (i, item) {
         var item_value = item.name;
         i = $(that.options.item).attr('data-value', item_value)
         var gravatar = '<img class="typeahead-gravatar" src="http://www.gravatar.com/avatar/' + item.gravatar + '?default=mm&size=16">';
@@ -143,7 +147,7 @@
         return i[0]
       })
 
-      items.first().addClass('active')
+      items.last().addClass('active')
       this.$menu.html(items)
       return this
     }

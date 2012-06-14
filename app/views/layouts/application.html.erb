@@ -5,6 +5,11 @@
     <%= stylesheet_link_tag    "application", media: "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
+
+    <!-- include jixed bar plugin TODO find way into pipeline-->
+    <link rel="stylesheet" type="text/css" href="/jixedbar/themes/default/jx.stylesheet.css">
+    <script type="text/javascript" src="/jixedbar/src/jquery.jixedbar.js"></script>
+
     <% if @current_user %>
       <meta name="user_id" content=<%= @current_user.id %> >
       <meta name="env" content=<%= Rails.env %> >
@@ -21,5 +26,6 @@
       <%= render 'layouts/footer' %>
       <%= debug(params) if Rails.env.development? %>
     </div>
+    <%= render 'layouts/command_line' %>
   </body>
 </html>

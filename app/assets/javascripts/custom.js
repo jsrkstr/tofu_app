@@ -75,13 +75,21 @@ App = {
 
 		App.setupTofuForm();
 
+		App.currentCommandLine = new App.views.CommandLine({ 
+			comments : App.currentComments,
+			receivedTofus : App.receivedTofus,
+			sentTofus : App.sentTofus
+		});
+
 	},
 
 
 	setupTofuForm : function(){
+
 		var items = App.currentFriends.toJSON().concat(App.commands);
-		$("#tofu_content").typeahead({ source : items, items : 4 });
-		$("#tofu-form").bind("submit", $.proxy(App.createTofu, App) );
+		$("#jx-tofu_content").typeahead({ source : items, items : 4 });
+		$(".jx-tofu-form").bind("submit", $.proxy(App.createTofu, App) );
+		$("#jx-new-tofu-button").click($.proxy(App.createTofu, App) );
 	},
 
 
@@ -91,10 +99,10 @@ App = {
 		this.sentTofus.create(attrs, {
 			wait : true,
 			success : function(){
-				$("#tofu_content").val("");
+				$("#jx-tofu_content").val("");
 			},
 			error : function(){
-				$("#tofu_content").val("");
+				$("#jx-tofu_content").val("");
 			}
 		});
 
@@ -120,7 +128,7 @@ App = {
 
       	var starting_with_at = /^@/;
 
-      	var content = $("#tofu_content").val();
+      	var content = $("#jx-tofu_content").val();
       	var splits = content.split(" ");
 
       	for (var i = splits.length - 1; i >= 0; i--) {
@@ -259,8 +267,6 @@ App.models.Tofu = Backbone.Model.extend({
 			created_at : new Date(),
 			author_id : App.currentUserId,
 			recipient_ids : recipient_ids.toString()
-		}, {
-			wait : true
 		});
 	}
 
@@ -411,11 +417,13 @@ App.views.Tofu = Backbone.View.extend({
 	onHide : function(e){
 		this.$(".accordion-heading").slideDown("fast");
 		this.open = false;
+		this.model.collection.trigger("close", this); // pass the view object
 	},
 
 	onShow : function(){
 		this.$(".accordion-heading").slideUp("fast");	
-		this.open = true;
+		this.open = true; 
+		this.model.collection.trigger("open", this); // pass the view object
 	},
 
 	isOpen : function(){
@@ -468,6 +476,11 @@ App.collections.Comments = Backbone.Collection.extend({
 	dispatch : function(comment){
 		var channel = "add:"+ comment.get("tofu_id");
 		this.trigger(channel, comment);
+	},
+
+
+	comparator : function(model){
+		return Date.parse(model.get("created_at"));
 	}
 
 
@@ -493,6 +506,72 @@ App.collections.Friends = Backbone.Collection.extend({
 
 });
 
+
+
+App.views.CommandLine = Backbone.View.extend({
+
+	el : "#command-line",
+
+	events : {
+		// bind events..
+	},
+
+
+	initialize : function(args){
+		$(this.el).jixedbar();
+
+		this.comments = args.comments;
+		args.receivedTofus.on("open", this.loadComments, this);
+		args.sentTofus.on("open", this.loadComments, this);
+		args.receivedTofus.on("close", this.unloadComments, this);
+		args.sentTofus.on("close", this.unloadComments, this);
+
+		this.commentTemplate = _.template($("#comment-template").html());
+	},
+
+
+	render : function(){
+		// do something...
+		return this;
+	},
+
+
+	loadComments : function(view){
+		this.unloadComments(); // unload previously loaded comments
+		var comments = this.comments.filter(function(comment){
+			return comment.get("tofu_id") == view.model.id;
+		});
+
+		_.each(comments, this.addComment, this);
+
+		var channel = "add" + view.model.id; // channel for a tofu's comments
+		this.comments.on(channel, this.addComment, this);
+	},
+
+
+	unloadComments : function(view){
+		this.$("#cmd-chat").empty();
+		this.comments.off(); // stop listening on for loaded tofu's channel
+	},
+
+
+	addComment : function(comment){
+		this.$("#cmd-chat").append(this.commentTemplate(comment.toJSON()));
+		this.openComments();
+	},
+
+
+	openComments : function(){
+		this.$("#cmd-chat").slideDown("fast");
+	},
+
+
+	closeComments : function(){
+		this.$("#cmd-chat").slideUp("fast");
+	}
+
+});
+	
 
 
 	
