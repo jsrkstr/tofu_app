@@ -375,6 +375,7 @@ input, textarea, select, .uneditable-input {
 
   overflow : initial !important;
   padding: 3px 0px;
+  box-shadow: #AAA 1px 0px 12px;
 
   #jx-tofu-form-div {
     margin: 0px;
@@ -400,11 +401,13 @@ input, textarea, select, .uneditable-input {
 
   #cmd-chat {
     position: absolute;
-    width: 804px;
-    height: 100px;
+    width: 360px;
+    height: 130px;
     left: 40px;
-    bottom: 46px;
-    background-color:  #E5E5E5;
+    bottom: 47px;
+    padding : 5px 10px;
+    background-color: #fff;
+    box-shadow: #AAA 1px -3px 11px;
     border:  #B5B5B5 solid 1px;
     -webkit-border-top-right-radius: 5px;
     -khtml-border-radius-topright: 5px;

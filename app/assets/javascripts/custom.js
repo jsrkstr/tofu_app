@@ -73,20 +73,20 @@ App = {
 			}
 		});
 
-		App.setupTofuForm();
+		//App.setupTofuForm();
 
 		App.currentCommandLine = new App.views.CommandLine();
 
 	},
 
 
-	setupTofuForm : function(){
+	// setupTofuForm : function(){
 
-		var items = App.currentFriends.toJSON().concat(App.commands);
-		$("#jx-tofu_content").typeahead({ source : items, items : 4 });
-		$(".jx-tofu-form").bind("submit", $.proxy(App.createTofu, App) );
-		$("#jx-new-tofu-button").click($.proxy(App.createTofu, App) );
-	},
+	// 	var items = App.currentFriends.toJSON().concat(App.commands);
+	// 	$("#jx-tofu_content").typeahead({ source : items, items : 4 });
+	// 	$(".jx-tofu-form").bind("submit", $.proxy(App.createTofu, App) );
+	// 	$("#jx-new-tofu-button").click($.proxy(App.createTofu, App) );
+	// },
 
 
 	createTofu : function(){
@@ -232,14 +232,14 @@ App.models.Tofu = Backbone.Model.extend({
 	initialize : function(args){
 		this.set({timestamp : $.timeago(this.get("created_at"))});
 		
-		var comments_channel = "add:" + this.id;// listen to channel add:tofu_id
-		App.currentComments.on(comments_channel, this.addComment, this);
+		//var comments_channel = "add:" + this.id;// listen to channel add:tofu_id
+		//App.currentComments.on(comments_channel, this.addComment, this);
 	},
 
 
-	addComment : function(model){
-		this.trigger("add:comment", model);
-	},
+	// addComment : function(model){
+	// 	this.trigger("add:comment", model);
+	// },
 
 
 	createComment : function(content){
@@ -357,7 +357,7 @@ App.views.Tofu = Backbone.View.extend({
 
 
 	events : {
-		"click i" : "toggleInput",
+		//"click i" : "toggleInput",
 		"submit .comment-form" : "createComment",
 		"hide" : "onHide",
 		"show" : "onShow",
@@ -370,7 +370,7 @@ App.views.Tofu = Backbone.View.extend({
 
 	initialize : function(args){
 		this.template =  _.template($("#tofu-template").html());
-		this.model.on("add:comment", this.addComment, this);
+		// this.model.on("add:comment", this.addComment, this);
 		this.commentTemplate = _.template($("#comment-template").html());
 		this.model.on("change", this.renderOpen, this);
 		this.model.on("change:status", function(){
@@ -397,19 +397,19 @@ App.views.Tofu = Backbone.View.extend({
 	},
 
 
-	addComment : function(model){
-		this.$(".comments").append(this.commentTemplate(model.toJSON()));
-		if(!this.isOpen() && App.isMilestone("comments-loaded")){
-			this.$(".collapse").collapse('show');
-			this.glitter(true);
-		}
-	},
+	// addComment : function(model){
+	// 	this.$(".comments").append(this.commentTemplate(model.toJSON()));
+	// 	if(!this.isOpen() && App.isMilestone("comments-loaded")){
+	// 		this.$(".collapse").collapse('show');
+	// 		this.glitter(true);
+	// 	}
+	// },
 
 
-	toggleInput : function(e){
-		if(!$(e.target).hasClass("comment-box"))
-			this.$("input").slideToggle(100);
-	},
+	// toggleInput : function(e){
+	// 	if(!$(e.target).hasClass("comment-box"))
+	// 		this.$("input").slideToggle(100);
+	// },
 
 
 	onHide : function(e){
@@ -511,12 +511,12 @@ App.views.CommandLine = Backbone.View.extend({
 	el : "#command-line",
 
 	events : {
-		// bind events..
+		// "click .jx-hide" : "cons"
 	},
 
 
 	initialize : function(args){
-		$(this.el).jixedbar();
+		this.$el.jixedbar();
 
 		App.receivedTofus.on("opened", this.loadComments, this);
 		App.sentTofus.on("opened", this.loadComments, this);
@@ -524,6 +524,19 @@ App.views.CommandLine = Backbone.View.extend({
 		// App.sentTofus.on("closed", this.unloadComments, this);
 
 		this.commentTemplate = _.template($("#comment-template").html());
+
+		// cnt use in events, as this button is added on the fly
+		$(".jx-hide").parent().click($.proxy(function(){
+			this.previousState = this.state;
+			this.closeComments(50);
+		}, this)); 
+
+		$("#jx-uhid-itm-id").click($.proxy(function(){
+			window.setTimeout($.proxy(function(){
+				if(this.previousState == "open")
+				this.openComments();
+			}, this), 370);
+		}, this)); 
 	},
 
 
@@ -539,7 +552,11 @@ App.views.CommandLine = Backbone.View.extend({
 			return comment.get("tofu_id") == view.model.id;
 		});
 
-		_.each(comments, this.addComment, this);
+		if(comments.length != 0 )
+			_.each(comments, this.addComment, this);
+		else
+			this.closeComments();
+
 
 		this.currentTofuChannel = "add:" + view.model.id; // channel for a tofu's comments
 		App.currentComments.on(this.currentTofuChannel, this.addComment, this);
@@ -558,13 +575,20 @@ App.views.CommandLine = Backbone.View.extend({
 	},
 
 
-	openComments : function(){
-		this.$("#cmd-chat").slideDown("fast");
+	openComments : function(options){
+		this.$("#cmd-chat").slideDown(options || "fast");
+		this.state = "open";
 	},
 
 
-	closeComments : function(){
-		this.$("#cmd-chat").slideUp("fast");
+	closeComments : function(options){
+		this.$("#cmd-chat").slideUp(options || "fast");
+		this.state = "close";
+	},
+
+
+	isOpen : function(){
+		return this.state == "open" ? true : false ;
 	}
 
 });
