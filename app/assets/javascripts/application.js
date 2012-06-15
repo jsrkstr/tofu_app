@@ -13,9 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //= require underscore-min
-//= require backbone-min
+//= require backbone_max
 //= require backbone.io
 //= require bootstrap
+//= require custom
+//= require_directory ./models
+//= require_directory ./collections
+//= require_directory ./views
 //= require_tree .
-//= reqire custom
 

@@ -312,6 +312,10 @@ input, textarea, select, .uneditable-input {
       overflow: hidden;
       text-overflow: ellipsis;
       width: 385px;
+
+      .buttons {
+        float : right;
+      }
     }
   }
 
@@ -407,7 +411,7 @@ input, textarea, select, .uneditable-input {
 
 #command-line {
 
-  overflow : initial !important;
+  overflow : visible !important;
   padding: 3px 0px;
   box-shadow: #AAA 1px 0px 12px;
 
