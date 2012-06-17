@@ -34,7 +34,17 @@ App.views.Tofu = Backbone.View.extend({
 
 
 	render : function(){
-		$(this.el).html(this.template(this.model.toJSON())).attr("id", this.model.id);
+		var json = this.model.toJSON();
+		_.extend(json, {
+			labelClasses : {
+				"accepted": "info",
+				"declined": "danger",
+				"done": "success", 
+				"new": "info"
+			}
+		});
+		this.$el.addClass("task-" + json.status);
+		$(this.el).html(this.template(json)).attr("id", this.model.id);
 		this.checkReminder();
 		return this;
 	},

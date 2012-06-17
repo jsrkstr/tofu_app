@@ -15,15 +15,15 @@
     </aside>
   </div>   -->
   <div class="row">
-    <div class="span6" id="received-tofus">
-        <h3>Tofus Received</h3>
-        <div class="bootstrapped-models" id="bootstrapped-tofus" data='<%= @tofus.to_json %>'></div>
-        <%#= render 'shared/received_tofus' %>
-    </div>
     <div class="span6" id="sent-tofus">
-        <h3>Tofus Sent</h3>
+        <h3>Sent</h3>
         <div class="bootstrapped-models" id="bootstrapped-received-tofus" data='<%= @received_tofus.to_json %>'></div>
         <%#= render 'shared/tofus' %>
+    </div>
+    <div class="span6" id="received-tofus">
+        <h3>Received</h3>
+        <div class="bootstrapped-models" id="bootstrapped-tofus" data='<%= @tofus.to_json %>'></div>
+        <%#= render 'shared/received_tofus' %>
     </div>
   </div>
   <script type="text/javascript">
@@ -57,7 +57,7 @@
                     <button class="accepted-task btn btn-small btn-primary">Accept</button>
                   {{ } }}
                   {{ if( status == "declined" || status == "new" ){ }}
-                    <button class="declined-task btn btn-small" {{= status == 'declined'? 'disabled>Declined' : '>Decline' }}</button>
+                    <button class="declined-task btn btn-small btn-danger" {{= status == 'declined'? 'disabled>Declined' : '>Decline' }}</button>
                   {{ } }}
                   {{ if(status == "accepted" || status == "done"){ }}
                     {{ if(status == 'accepted'){ }}
@@ -104,12 +104,6 @@
 
         </div>
 
-        <div>
-          <ul class="comments"></ul>
-          <form class="comment-form" onsubmit="return false">
-            <input type="text" class="span5 hide comment-box" placeholder="Type something…">
-          </form>
-        </div>
       </div>
     </div>
   </script>
@@ -122,17 +116,54 @@
   </script>
   <%= render 'layouts/command_line' %>
 <% else %>
-  <div class="center hero-unit">
-    <h1>Welcome to the Sample App</h1>
+  <div class="hero-unit">
+    <img src="/assets/hero.png">
+    <h1>The To-Foo List</h1>
 
     <h2>
-      This is the home page for the
-      <a href="http://railstutorial.org/">Ruby on Rails Tutorial</a>
-      sample application.
+      Intuitive Task Tracking for Smart Teams
     </h2>
 
     <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
   </div>
+  <div class="row">
+    <div class="marketing">
+        <div class="row">
+            <div class="span4">
+                <img class="bs-icon" src="/images/glyphicons/glyphicons_066_tags.png">
+                <h2>Store and tag your snippets</h2>
+                <p>Save and organize your code snippets with appropriate tags</p>
+            </div>
+            <div class="span4">
+                <img class="bs-icon" src="/images/glyphicons/glyphicons_027_search.png">
+                <h2>Search for public snippets</h2>
+                <p>You can search all public snippet saved by other users</p>
+            </div>
+            <div class="span4">
+                <img class="bs-icon" src="/images/glyphicons/glyphicons_062_attach.png">
+                <h2>Reuse your snippets</h2>
+                <p>Copy and paste your snippets in your projects and save precious time</p>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="row">
+            <div class="span4">
+                <img class="bs-icon" src="/images/glyphicons/glyphicons_326_share.png">
+                <h2>Share your snippets</h2>
+                <p>You can collaborate with other users by sharing public or private snippets</p>
+            </div>
+            <div class="span4">
+                <img class="bs-icon" src="/images/glyphicons/glyphicons_043_group.png">
+                <h2>Social</h2>
+                <p>You can interact with other developers, you can follow their updates, comment and vote their public snippets</p>
+            </div>
+            <div class="span4">
+                <img class="bs-icon" src="/images/glyphicons/glyphicons_118_embed_close.png">
+                <h2>Developer's API <span class="label label-info">Coming soon</span></h2>
+                <p>TagMyCode API allows third parties to easily interface this platform</p>
+            </div>
+        </div>
 
-  <%= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/' %>
+    </div>
+  </div>
 <% end %> 

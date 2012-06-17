@@ -35,6 +35,7 @@ App.views.Tofus = Backbone.View.extend({
 		$(el).hide();
 		$(this.el).prepend(el);
 		$(el).slideDown("slow");
+		model.view = view; // save a reference
 	}
 
 });

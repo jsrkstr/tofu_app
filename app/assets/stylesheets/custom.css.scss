@@ -24,16 +24,6 @@ section {
   overflow: auto;
 }
 
-textarea {
-  resize: vertical;
-}
-
-.center {
-  text-align: center;
-  h1 {
-    margin-bottom: 10px;
-  }
-}
 
 /* typography */
 
@@ -45,14 +35,12 @@ h1 {
   font-size: 3em;
   letter-spacing: -2px;
   margin-bottom: 30px;
-  text-align: center;
 }
 
 h2 {
   font-size: 1.7em;
   letter-spacing: -1px;
   margin-bottom: 30px;
-  text-align: center;
   font-weight: normal;
   color: $grayLight;
 }
@@ -107,6 +95,19 @@ footer {
   }
 }
 
+/* Home */
+
+.hero-unit {
+
+  img {
+    width : 325px;
+    float : right;
+  }
+}
+
+
+/* Home */
+
 /* miscellaneous */
 
 .f-left {
@@ -115,6 +116,22 @@ footer {
 
 .f-right {
   float : right;
+}
+
+.task-done {
+  border-right : 8px solid $btnSuccessBackground;
+}
+
+.task-accepted {
+  border-right : 8px solid $btnInfoBackground;
+}
+
+.task-declined {
+  border-right : 8px solid $btnDangerBackground;
+}
+
+.task-new {
+  border-right : 8px solid $btnWarningBackground;
 }
 
 .debug_dump {
@@ -302,7 +319,7 @@ input, textarea, select, .uneditable-input {
       float : left;
     }
 
-    span {
+    .content {
       float : left;
       margin-top : 5px;
     }
@@ -332,31 +349,22 @@ input, textarea, select, .uneditable-input {
     min-height : 60px
   }
 
+  .tofu-left {
+
+    .label {
+      float : left;
+      margin-top : 5px;
+    }
+  }
+
   .tofu-mid {
-    min-height : 42px
+    min-height : 42px;
+    padding-left: 50px;
   }
   
-  .comment-box {
-    height : 26px;
-    margin : 0px;
-  }
-
-  .comment-form {
-    margin : 5px 0px 0px 0px;
-    padding-left : 60px;
-  }
-
   .status {
-    i {
-      float : right;
-      margin: 4px;
-      margin-left: 10px;
-      cursor : pointer;
-    }
 
-    .dropdown-toggle {
-
-    }
+    height : 22px;
 
   }
 
@@ -440,10 +448,10 @@ input, textarea, select, .uneditable-input {
   #cmd-chat {
     position: absolute;
     width: 360px;
-    height: 130px;
+    height: 155px;
     left: 40px;
-    bottom: 47px;
-    padding : 5px 10px;
+    bottom: 42px;
+    padding : 10px 10px;
     background-color: #fff;
     box-shadow: #999 1px -3px 11px;
     border:  #B5B5B5 solid 1px;
@@ -455,29 +463,30 @@ input, textarea, select, .uneditable-input {
     -khtml-border-radius-topleft: 5px;
     -moz-border-radius-topleft: 5px;
     border-top-left-radius: 5px;
-    border-bottom: none;
     display : none;
-    overflow-y : auto;
-    border-top-width : 10px;
-    border-top-color : #fff;
-    border-left-color : #fff;
-    border-right-color : #fff;
+    overflow-y : hidden;
 
-    li {
-      width : 97%;
-      padding : 3px;
-      border : none;
-      border-top : 1px solid #cecece;
-      border-radius : 0px;
-      cursor : auto;
+    ul {
 
-      .avatar {
-        float : left;
-        margin-right : 5px
-      }
+      overflow-y : auto;
+      height : 100%;
 
-      span {
-        background-color : initial;
+      li {
+        width : 97%;
+        padding : 3px;
+        border : none;
+        border-top : 1px solid #cecece;
+        border-radius : 0px;
+        cursor : auto;
+
+        .avatar {
+          float : left;
+          margin-right : 5px
+        }
+
+        span {
+          background-color : transparent;
+        }
       }
     }
 

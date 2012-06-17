@@ -47,14 +47,9 @@ App.views.CommandLine = Backbone.View.extend({
 				$(".typeahead").css("opacity", "1");
 		}, this);
 
-		// $(".jx-tofu-form").bind("submit", $.proxy(App.createTofu, App) );
-		// $("#jx-new-tofu-button").click($.proxy(App.createTofu, App) );
-	},
-
-
-	render : function(){
-		// do something...
-		return this;
+		// this feature will lead to sorting problems
+		// this.$("#jx-tofu_content").bind('keyup', jwerty.event('↑', this.loadPrevious, this));
+		// this.$("#jx-tofu_content").bind('keyup', jwerty.event('↓', this.loadNext, this));
 	},
 
 
@@ -66,7 +61,7 @@ App.views.CommandLine = Backbone.View.extend({
 
 		if(comments.length != 0 ){
 			_.each(comments, this.addComment, this);
-			this.$("#cmd-chat").animate({scrollTop : "1000"});
+			this.$("#cmd-chat ul").animate({scrollTop : "1000"});
 		} else {
 			this.openComments();
 		}
@@ -75,14 +70,18 @@ App.views.CommandLine = Backbone.View.extend({
 		this.currentTofuChannel = "add:" + view.model.id; // channel for a tofu's comments
 		App.currentComments.on(this.currentTofuChannel, this.onRealtimeComment, this);
 
-		this.loadedTofuView = view;
+		view.$(".collapse").one("shown", $.proxy(function(){ // mark as loaded only after animation complete
+			this.loadedTofuView = view;
+			console.log(Date.now());
+		}, this));
+		
 		this.trigger("change:tofu", true);
 		this.$("#jx-tofu_content").focus();
 	},
 
 
 	unloadTofu : function(view){
-		this.$("#cmd-chat").empty();
+		this.$("#cmd-chat ul").empty();
 		App.currentComments.off(this.currentTofuChannel || "fakechannel", this.onRealtimeComment); // stop listening on for loaded tofu's channel
 		this.loadedTofuView = undefined;
 		this.trigger("change:tofu", false);
@@ -93,15 +92,64 @@ App.views.CommandLine = Backbone.View.extend({
 		return this.loadedTofuView ? true : false;
 	},
 
+	// this feature will lead to sorting problems
+
+	// loadNext : function(){
+	// 	if(this.isTofuLoaded()){
+	// 		var model = this.loadedTofuView.model;
+	// 		var index = model.collection.indexOf(model)
+	// 		var view = model.collection.at(index -1).view;
+	// 		if(view){
+	// 			this.loadedTofuView.hide();// as in case of view.show, the prevvious one is not being hidden( bug in bootstrap)
+	// 			view.show();
+	// 		}
+	// 	}
+	// 	// else {
+	// 	// 	console.log("no tofu loaded");// as another animation is on or no tofu loaded
+	// 	// }
+	// },
+
+
+	// loadPrevious : function(){
+	// 	if(this.isTofuLoaded()){
+	// 		var model = this.loadedTofuView.model;
+	// 		var index = model.collection.indexOf(model)
+	// 		var view = model.collection.at(index + 1).view;
+	// 		if(view){
+	// 			this.loadedTofuView.hide();
+	// 			view.show();
+	// 		}
+	// 	}
+	// },
+
+
+	// loadLeft : function(){
+	// 	if(this.isTofuLoaded()){
+	// 		var model = this.loadedTofuView.model;
+	// 		var index = model.collection.length - model.collection.indexOf(model)
+	// 		var view = model.collection.at(index -1).view;
+	// 		if(view){
+	// 			this.loadedTofuView.hide();// as in case of view.show, the prevvious one is not being hidden( bug in bootstrap)
+	// 			view.show();
+	// 		}
+	// 	}
+	// },
+
+
+	// loadRight : function(){
+
+	// },
+
+
 
 	onRealtimeComment : function(comment){
 		this.addComment(comment);
-		this.$("#cmd-chat").animate({scrollTop : "1000"});
+		this.$("#cmd-chat ul").animate({scrollTop : "1000"});
 	},
 
 
 	addComment : function(comment){
-		this.$("#cmd-chat").append(this.commentTemplate(comment.toJSON()));
+		this.$("#cmd-chat ul").append(this.commentTemplate(comment.toJSON()));
 		this.openComments();
 	},
 
