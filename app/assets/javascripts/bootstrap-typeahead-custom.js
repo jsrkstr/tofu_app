@@ -56,7 +56,7 @@
       })
 
       this.$menu.css({
-        bottom : 45
+        bottom : 50
         //top: pos.top - 110 //+ pos.height
       , left: pos.left
       , position : "fixed"

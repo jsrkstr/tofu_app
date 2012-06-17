@@ -1,10 +1,47 @@
 <%= provide(:title, 'All users') %>
-<h1>All users</h1>
 
-<%= will_paginate %>
+<% if current_user.pending_friends.length > 0 || current_user.requested_friends.length > 0 %>
+<div class="row connections">
+	<div class="span5">
+		<h2></h2>
+		<h2>Connection requests</h2>
+		<ul class="users">
+			<% current_user.pending_friends.each do |user| %>
+				<% @friend_requested = true %>
+				<% @friend_pending = false %>
+				<%= render user %>
+			<% end %>
+		</ul>
+	</div>
+	<div class="span5 offset1">
+		<h2></h2>
+		<h2>Connections pending</h2>
+		<ul class="users">
+			<% current_user.requested_friends.each do |user| %>
+				<% @friend_requested = false %>
+				<% @friend_pending = true %>
+				<%= render user %>
+			<% end %>
+		</ul>
+	</div>
+</div>
+<% end %>
+<div class="row all-users">
+	<div class="span5">
+		<h2></h2>
+		<h2>All users</h2>
 
-<ul class="users">
-  <%= render @users %>
-</ul>
+		<%= will_paginate %>
 
-<%= will_paginate %>
+		<ul class="users">
+			<% @friend_requested = false %>
+			<% @friend_pending = false %>
+		  <%= render @users %>
+		</ul>
+
+		<%= will_paginate %>
+	</div>
+</div>
+
+
+

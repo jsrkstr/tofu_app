@@ -26,8 +26,8 @@ App = {
 
 		App.env = $("meta[name=env]").attr("content");
 
-		$("#connect-button").bind("click", $.proxy(App.connectUser, App) );
-		$("#disconnect-button").bind("click", $.proxy(App.disconnectUser, App) );
+		$(".connect-btn").bind("click", $.proxy(App.connectUser, App) );
+		$(".disconnect-btn").live("click", $.proxy(App.disconnectUser, App) );
 
 		_.templateSettings = {
 		  interpolate : /\{\{\=(.+?)\}\}/g,
@@ -97,8 +97,9 @@ App = {
 	},
 
 
-	connectUser : function(){
-		var user_id = $("#connect-button").attr("data-user-id");
+	connectUser : function(e){
+		var elm = e.target;
+		var user_id = $(elm).attr("data-user-id");
 
 		$.ajax({
 			url : "/friendships",
@@ -107,7 +108,10 @@ App = {
 				user_id : user_id
 			}},
 			success : function(){
-				console.log("connected");
+				if( $(elm).hasClass("btn-primary"))
+					$(elm).removeClass("connect-btn").attr("disabled","").val("Pending");
+				else // in case of incoming request
+					$(elm).removeClass("connect-btn btn-success").addClass("disconnect-btn").val("Disconnect");
 			},
 			error : function(){
 				console.log("error in connecting");
@@ -116,13 +120,14 @@ App = {
 	},
 
 
-	disconnectUser : function(){
-		var friendship_id = $("#disconnect-button").attr("data-friendship-id");
+	disconnectUser : function(e){
+		var elm = e.target;
+		var friendship_id = $(elm).attr("data-friendship-id");
 		$.ajax({
 			url : "/friendships/" + friendship_id,
 			type : "DELETE",
 			success : function(){
-				console.log("disconnected");
+				$(elm).removeClass("disconnect-btn").addClass("btn-primary connect-btn").val("Connect");
 			},
 			error : function(){
 				console.log("error in disconnecting");

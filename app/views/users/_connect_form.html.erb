@@ -1,10 +1,22 @@
 <% unless current_user?(@user) %>
-  <div id="follow_form">
-  <% @friendship = current_user.friend?(@user.id) %>
-  <% if @friendship %>
-    <%= render 'disconnect' %>
-  <% else %>
-    <%= render 'connect' %>
-  <% end %>
+  <div class="connect-form">
+  	<% if @friend_requested == true %>
+  		<%= render 'confirm' %>
+  	<% elsif @friend_pending == true %>
+  		<%= render 'pending' %>
+  	<% else %>
+		<% @friendship = current_user.friend?(@user.id) %>
+		<% if @friendship %>
+			<%= render 'disconnect' %>
+		<% else %>
+			<% if current_user.pending_friends.include?(@user) %>
+				<%= render 'confirm' %>
+			<% elsif current_user.requested_friends.include?(@user)%>
+				<%= render 'pending' %>
+			<% else %>
+				<%= render 'connect' %>
+			<% end %>
+		<% end %>
+	<% end %>
   </div>
 <% end %>

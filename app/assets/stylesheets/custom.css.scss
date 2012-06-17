@@ -18,6 +18,10 @@ html {
 
 body {
   padding-top: 60px;
+  background-color: white;
+  background-image: url(/assets/grid-18px-masked.png);
+  background-repeat: repeat-x;
+  background-position: 0 40px;
 }
 
 section {
@@ -105,6 +109,21 @@ footer {
   }
 }
 
+.bs-icon {
+  float: left;
+  margin: 3px 10px 29px 0;
+}
+
+.hero-row {
+
+  h2 {
+    margin : 0px;
+  }
+}
+
+.spacer {
+  height : 10px;
+}
 
 /* Home */
 
@@ -116,6 +135,15 @@ footer {
 
 .f-right {
   float : right;
+}
+
+.navbar .nav .btn-danger {
+  line-height : 7px;
+  color : white;
+}
+
+.navbar .nav .btn-danger:hover {
+  background-color : #BD362F;
 }
 
 .task-done {
@@ -339,6 +367,7 @@ input, textarea, select, .uneditable-input {
   .accordion-inner {
 
     border-top : none;
+    background-color : white;
 
     .gravatar {
       width : 42px;
@@ -420,7 +449,7 @@ input, textarea, select, .uneditable-input {
 #command-line {
 
   overflow : visible !important;
-  padding: 3px 0px;
+  padding: 8px 0px;
   box-shadow: #AAA 1px 0px 12px;
 
   #jx-tofu-form-div {
@@ -450,7 +479,7 @@ input, textarea, select, .uneditable-input {
     width: 360px;
     height: 155px;
     left: 40px;
-    bottom: 42px;
+    bottom: 52px;
     padding : 10px 10px;
     background-color: #fff;
     box-shadow: #999 1px -3px 11px;
@@ -503,3 +532,37 @@ input, textarea, select, .uneditable-input {
     border-radius : 0px;
   }
 }
+
+
+/* Users Index */
+
+.all-users {
+  background-color : white;
+
+  .gravatar {
+    width : 42px;
+  }
+
+  .connect-form {
+    float : right;
+  }
+}
+
+.connections {
+  
+  background-color : white;
+  margin-bottom : 20px;
+  padding-bottom : 40px;
+  border : 1px solid #eee;
+  border-radius : 30px;
+
+  .gravatar {
+    width : 42px;
+  }
+
+  .connect-form {
+    float : right;
+  }
+}
+
+/* Users Index */

@@ -40,6 +40,10 @@ class User < ActiveRecord::Base
 
   has_many :indirect_friends, :through => :inverse_approved_friendships, :source => :user
 
+  has_many :requested_friends, :through => :unapproved_friendships, :source => :friend
+
+  has_many :pending_friends, :through => :inverse_unapproved_friendships, :source => :user
+
 
 
   def friends
@@ -66,6 +70,7 @@ class User < ActiveRecord::Base
   def requested_friendships
     unapproved_friendships
   end
+
 
   # connect to a user
   def connect(other_user_id)

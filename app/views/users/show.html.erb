@@ -5,25 +5,15 @@
       <h1>
         <%= gravatar_for @user %>
         <%= @user.name %>
-        <%= render 'connect_form' if signed_in? %>
       </h1>
     </section>
     <section>
-      <%= render 'shared/stats' %>
+      <%#= render 'shared/stats' %>
     </section>
   </aside>
   <div class="span8">
-    <%= render 'follow_form' if signed_in? %>
-    <% if @user.microposts.any? %>
-      <h3>Microposts (<%= @user.microposts.count %>)</h3>
-      <ol class="microposts">
-        <%= render @microposts %>
-      </ol>
-      <%= will_paginate @microposts %>
-    <% end %>
-  </div>
-  <div class="span8">
-    <% if @user.tofus.any? %>
+    <%= render 'connect_form' if signed_in? %>
+    <% if current_user?(@user) && @user.tofus.any? %>
       <h3>My Tofus (<%= @user.tofus.count %>)</h3>
       <ol class="tofus">
         <%= render @tofus %>
