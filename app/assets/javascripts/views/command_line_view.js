@@ -149,7 +149,13 @@ App.views.CommandLine = Backbone.View.extend({
 
 
 	addComment : function(comment){
-		this.$("#cmd-chat ul").append(this.commentTemplate(comment.toJSON()));
+		var json = comment.toJSON();
+		var author = App.currentUser.id == json.author_id ? App.currentUser : App.currentFriends.get(json.author_id);
+		_.extend(json, {
+			"gravatar_id" : author.get("gravatar_id"),
+			"author_name" : author.get("name")
+		});
+		this.$("#cmd-chat ul").append(this.commentTemplate(json));
 		this.openComments();
 	},
 

@@ -6,6 +6,7 @@ class StaticPagesController < ApplicationController
       @tofus = current_user.tofus.paginate(page: params[:page])
       @received_tofus = current_user.received_tofus.paginate(page: params[:page])
       @friends = current_user.friends
+      # TODO delete password and other confidentials from current_user as it goes into user model
     end
   end
 

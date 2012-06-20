@@ -122,6 +122,17 @@ class User < ActiveRecord::Base
 
   before_save { |user| user.email = email.downcase }
   before_save :create_remember_token
+  before_save :create_gravatar_id
+
+
+  # hotfix for existing users, save gravatar_id
+  after_initialize do |user|
+    unless user.gravatar_id
+      user["gravatar_id"] = Digest::MD5::hexdigest(user.email.downcase)
+      user.save
+    end
+  end
+
 
   validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -151,6 +162,10 @@ class User < ActiveRecord::Base
 
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
+    end
+
+    def create_gravatar_id
+      self.gravatar_id = Digest::MD5::hexdigest(self.email.downcase)
     end
     
 end

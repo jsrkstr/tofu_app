@@ -35,13 +35,19 @@ App.views.Tofu = Backbone.View.extend({
 
 	render : function(){
 		var json = this.model.toJSON();
+
+		// author model
+		var author = App.currentUser.id == json.user_id ? App.currentUser : App.currentFriends.get(json.user_id);
+
 		_.extend(json, {
 			labelClasses : {
 				"accepted": "info",
 				"declined": "danger",
 				"done": "success", 
 				"new": "info"
-			}
+			},
+			"gravatar_id" : author.get("gravatar_id"),
+			"user_name" : author.get("name")
 		});
 		this.$el.addClass("task-" + json.status);
 		$(this.el).html(this.template(json)).attr("id", this.model.id);
