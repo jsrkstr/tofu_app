@@ -52,22 +52,40 @@ App = {
 		App.socket = io.connect(socketUrl);
 
 		App.socket.on('connect', function () {
+
 			App.socket.emit("register", App.currentUserId, function(d){
 				console.log("connected to socket", d);
 				App.socket.emit("history", "comments", function(d){
 					App.currentComments.add(d);
 					App.markMilestone("comments-loaded");
 				});
+
+				App.socket.emit("presence", App.currentFriends.pluck("id"), function(ids){
+					for (var i = ids.length - 1; i >= 0; i--) {
+						App.currentFriends.get(ids[i]).set({online : true});
+					};
+				});
+
 			});
 		});
+
 
 		App.socket.on("message", function(data){
 			switch(data.group) {// its a tofu
 				case "comment" : 
-					App.currentComments.add(data);
-					App.audioManager.play("chat");
-					var authorName = App.currentFriends.get(data.author_id).get("name");
-					$.titleAlert("New message from " + authorName +"!");
+						App.currentComments.add(data);
+						App.audioManager.play("chat");
+						var authorName = App.currentFriends.get(data.author_id).get("name");
+						$.titleAlert("New message from " + authorName +"!");
+					break;
+
+				case "presence" : 
+						for (var i = data.ids.length - 1; i >= 0; i--) {
+							if(data.action == "online")
+								App.currentFriends.get(data.ids[i]).set({online : true});
+							else
+								App.currentFriends.get(data.ids[i]).set({online : false});
+						};
 					break;
 
 				default : if(App.sentTofus.get(data.id)){ // updated
