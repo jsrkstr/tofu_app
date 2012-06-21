@@ -62,8 +62,10 @@
       if(!maxBlinksReached && !blinkElem[0].stopped) {
         setTimeout(toggleFade, settings.blinkPeriod/2);
       } else {
-        if(blinkElem[0].hidden && on)
+        if(blinkElem[0].hidden)
           blinkElem.fadeTo(settings.speed, 0.01);
+        else
+          blinkElem.fadeTo(settings.speed, 1);
       }
     })();
 

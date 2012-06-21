@@ -63,19 +63,30 @@ App = {
 
 		App.socket.on("message", function(data){
 			switch(data.group) {// its a tofu
-				case "comment" : App.currentComments.add(data);
+				case "comment" : 
+					App.currentComments.add(data);
+					App.audioManager.play("chat");
+					var authorName = App.currentFriends.get(data.author_id).get("name");
+					$.titleAlert("New message from " + authorName +"!");
 					break;
 
-				default : if(App.sentTofus.get(data.id)) // updated
+				default : if(App.sentTofus.get(data.id)){ // updated
 							App.sentTofus.forceAdd(data);
-						else //new
+							App.audioManager.play("tofu");
+						} else {//new
 							App.receivedTofus.add(data);
+							App.audioManager.play("tofu");
+						}
 			}
 		});
 
 		//App.setupTofuForm();
 
 		App.currentCommandLine = new App.views.CommandLine();
+
+		App.audioManager = new  AudioManager();
+		App.audioManager.load("/sounds/drip.wav", "chat");
+		App.audioManager.load("/sounds/ding.wav", "tofu");
 
 	},
 

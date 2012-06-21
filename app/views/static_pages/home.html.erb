@@ -37,7 +37,7 @@
   <script type="text/template" id="tofu-template">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-target={{= "#collapse-" + id }} data-parent=".tofus">
-        <img src="http://www.gravatar.com/avatar/{{= gravatar_id }}" class="gravatar">
+        <img src="http://www.gravatar.com/avatar/{{= gravatar_id }}?d=mm" class="gravatar">
         <span class="content"><div class="buttons"></div>{{= content }}</span>
       </a>
     </div>
@@ -48,7 +48,7 @@
         <div class="tofu-top">
           <div class="tofu-left">
             <a href={{= "/users/" + user_id }}>
-              <img src="http://www.gravatar.com/avatar/{{= gravatar_id }}" class="gravatar">
+              <img src="http://www.gravatar.com/avatar/{{= gravatar_id }}?d=mm" class="gravatar">
             </a>
             <span class="label">{{= group }}<border/span>
           </div>    

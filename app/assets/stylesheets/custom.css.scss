@@ -162,6 +162,8 @@ footer {
   border-right : 8px solid $btnWarningBackground;
 }
 
+
+
 .debug_dump {
   clear: both;
   float: left;
@@ -523,6 +525,23 @@ input, textarea, select, .uneditable-input {
       }
     }
 
+  }
+
+
+  .done-tofoo-chat {
+    box-shadow : $btnSuccessBackground 1px -3px 11px !important;
+  }
+
+  .accepted-tofoo-chat {
+    box-shadow : $btnInfoBackground 1px -3px 11px !important;
+  }
+
+  .declined-tofoo-chat {
+    box-shadow : $btnDangerBackground 1px -3px 11px !important;
+  }
+
+  .new-tofoo-chat {
+    box-shadow : $btnWarningBackground 1px -3px 11px !important;
   }
 
 }

@@ -77,6 +77,10 @@ App.views.CommandLine = Backbone.View.extend({
 		
 		this.trigger("change:tofu", true);
 		this.$("#jx-tofu_content").focus();
+
+		// add chat shadow color as of tofu
+		this.$("#cmd-chat").attr("class", view.model.get("status") + "-tofoo-chat");
+
 	},
 
 
@@ -85,12 +89,15 @@ App.views.CommandLine = Backbone.View.extend({
 		App.currentComments.off(this.currentTofuChannel || "fakechannel", this.onRealtimeComment); // stop listening on for loaded tofu's channel
 		this.loadedTofuView = undefined;
 		this.trigger("change:tofu", false);
+		// remove chat shadow color
+		this.$("#cmd-chat").attr("class", "");
 	},
 
 
 	isTofuLoaded : function(){
 		return this.loadedTofuView ? true : false;
 	},
+
 
 	// this feature will lead to sorting problems
 
@@ -151,10 +158,19 @@ App.views.CommandLine = Backbone.View.extend({
 	addComment : function(comment){
 		var json = comment.toJSON();
 		var author = App.currentUser.id == json.author_id ? App.currentUser : App.currentFriends.get(json.author_id);
-		_.extend(json, {
-			"gravatar_id" : author.get("gravatar_id"),
-			"author_name" : author.get("name")
-		});
+
+		if(author){
+			_.extend(json, {
+				"gravatar_id" : author.get("gravatar_id"),
+				"author_name" : author.get("name")
+			});
+		} else {
+			_.extend(json, {
+				"gravatar_id" : undefined,
+				"author_name" : ""
+			});
+		}
+
 		this.$("#cmd-chat ul").append(this.commentTemplate(json));
 		this.openComments();
 	},
