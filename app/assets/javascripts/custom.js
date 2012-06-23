@@ -64,6 +64,8 @@ App = {
 					for (var i = ids.length - 1; i >= 0; i--) {
 						App.currentFriends.get(ids[i]).set({online : true});
 					};
+					
+					var presenceView = new App.views.Presence({ collection : App.currentFriends });
 				});
 
 			});

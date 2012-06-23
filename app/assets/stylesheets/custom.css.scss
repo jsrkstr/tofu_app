@@ -589,3 +589,66 @@ input, textarea, select, .uneditable-input {
 }
 
 /* Users Index */
+
+
+/* presence sidebar */
+
+#presence-sidebar {
+  position : fixed;
+  right : 30px;
+  top : 40px;
+
+  background-color: whiteSmoke;
+  border: 1px solid #E5E5E5;
+  border-top: none;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+  ul {
+    list-style: none;
+    padding: 0px 20px;
+    margin : 10px 0px;
+    width : 60px;
+    max-height : 415px;
+    overflow-y : auto;
+    position : relative;
+
+
+    li {
+      margin-bottom: 10px;
+      border: 5px solid #62C462;
+      width: 50px;
+      border-radius: 30px;
+      height: 50px;
+
+      img {
+        width: 42px;
+        border-radius: 20px;
+        margin-left: 4px;
+        margin-top: 4px;
+      }
+
+      div {
+        width: 60px;
+        text-align: center;
+      } 
+    }
+
+  }
+
+  .pane {
+    background : transparent;
+
+    .slider {
+      background : #ccc;
+    }
+  }
+
+  #online-frnd-count {
+    font-size: 11px;
+    text-align: center;
+  }
+
+}
+
+/* presence sidebar */

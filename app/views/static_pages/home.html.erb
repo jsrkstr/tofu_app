@@ -118,7 +118,20 @@
       <span>{{= content }}</span>
     </li>
   </script>
+  <!-- Command line html -->
   <%= render 'layouts/command_line' %>
+  <!-- onlone friends sidebar -->
+  <div id="presence-sidebar">
+    <div class="nano">
+      <ul class="content"></ul>
+    </div>
+    <div id="online-frnd-count"></div>
+  </div>
+
+  <script type="text/template" id="presence-friend-template">
+      <img title="{{= name }}" src="http://www.gravatar.com/avatar/{{= gravatar_id }}?d=mm">
+  </script>
+
 <% else %>
   <div class="hero-unit">
     <img src="/assets/hero.png">
