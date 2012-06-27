@@ -1,7 +1,7 @@
 class TofusController < ApplicationController
   before_filter :signed_in_user
 
-  respond_to :json
+  # respond_to :json
 
   def create
     # TODO send error on failure to save and send JSON instead of js
@@ -31,10 +31,15 @@ class TofusController < ApplicationController
         }
       end
 
-      respond_with @tofu
+      # respond_with @tofu
   	else
-  		respond_with @tofu
+  		# respond_with @tofu
   	end
+
+    respond_to do |format|
+      format.json { render :json => @tofu }
+    end
+
 
   end
 
@@ -78,10 +83,15 @@ class TofusController < ApplicationController
         }
       end
       
-      respond_with @tofu
+      # respond_with @tofu
     else
-      respond_with @tofu
+      # respond_with @tofu
     end
+
+    respond_to do |format|
+      format.json { render :json => @tofu }
+    end
+    
   end
 
 

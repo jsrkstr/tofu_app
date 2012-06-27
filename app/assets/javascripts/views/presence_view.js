@@ -3,6 +3,7 @@ App.views.Presence = Backbone.View.extend({
 	el : "#presence-sidebar",
 
 	events : {
+		// "click li" : ""
 	},
 
 
