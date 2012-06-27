@@ -128,8 +128,10 @@ class User < ActiveRecord::Base
   # hotfix for existing users, save gravatar_id
   after_initialize do |user|
     unless user.gravatar_id
-      user["gravatar_id"] = Digest::MD5::hexdigest(user.email.downcase)
-      user.save
+      if user.email
+        user["gravatar_id"] = Digest::MD5::hexdigest(user.email.downcase)
+        user.save
+      end
     end
   end
 

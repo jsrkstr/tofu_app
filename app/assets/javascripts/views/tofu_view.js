@@ -107,7 +107,7 @@ App.views.Tofu = Backbone.View.extend({
 	},
 
 	changeTaskStatus : function(e){
-		this.model.set({status : $(e.target).attr("class").split("-")[0] }, {silent : true}).save();
+		this.model.set({status : $(e.target).attr("class").split("-")[0] }, {silent : true}).save({silent : true});
 		this.createNotification();
 	},
 
